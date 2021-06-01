@@ -1,0 +1,732 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+argc = 2
+argIndex = 0
+class = 32766
+funcResult = 0
+i = 3508
+kScriptStackLimit = 1001
+kScriptStackSize = 1000
+opcode = 46
+peek = 109
+pop = 4211
+pos = 986
+top = 109
+value = 46
+variable = 1
+_codeBase = 428
+_codeIp = 458
+_localStackPos = 990
+_runningScriptObjectIndex = 19
+_stackPos = 986
+
+
+//----- Lists ---------------------------------------------------------------------------------------------------------
+
+commandProcs = { }
+_stack = { }
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(cmd_add)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    Call stack.setTop((top + pop));
+}
+
+WhenBroadcastReceived(cmd_arg)
+{
+    Call value = readByte;
+    argIndex = value;
+    Call peek = stack.peek(((_localStackPos + 4) + argIndex));
+    Call stack.setTop(peek);
+}
+
+WhenBroadcastReceived(cmd_aset)
+{
+    Call Not implemented yet("aset");
+}
+
+WhenBroadcastReceived(cmd_band)
+{
+    Call Not implemented yet("band");
+}
+
+WhenBroadcastReceived(cmd_bnot)
+{
+    Call Not implemented yet("bnot");
+}
+
+WhenBroadcastReceived(cmd_bor)
+{
+    Call cmd_bor;
+}
+
+WhenBroadcastReceived(cmd_branch)
+{
+    Call value = readInt16;
+    _codeIp = (_codeBase + value);
+}
+
+WhenBroadcastReceived(cmd_branchFalse)
+{
+    Call value = readInt16;
+    Call top =_stack.top;
+    If (top == 0)
+    {
+        _codeIp = (_codeBase + value);
+    }
+}
+
+WhenBroadcastReceived(cmd_branchTrue)
+{
+    Call value = readInt16;
+    Call top =_stack.top;
+    If (Not ((top == 0)))
+    {
+        _codeIp = (_codeBase + value);
+    }
+}
+
+WhenBroadcastReceived(cmd_call)
+{
+    Call LOG("");
+    Call pos = getStackPos;
+    Call LOG(Operator.Join("ENTER: stackPtr = ", Operator.Join(Operator.Join(pos, "; _localStackPos = "), _localStackPos)));
+    Call value = readByte;
+    argc = value;
+    Call stack.push(argc);
+    Call stack.push((_codeIp - _codeBase));
+    Call stack.push(_runningScriptObjectIndex);
+    Call stack.push((kScriptStackLimit - _localStackPos));
+    Call pos = getStackPos;
+    _localStackPos = pos;
+    Call peek = stack.peek(((_localStackPos + argc) + 4));
+    _runningScriptObjectIndex = peek;
+    Call LOG(Operator.Join("argc = ", Operator.Join(Operator.Join(argc, "; _runningScriptObjectIndex = "), _runningScriptObjectIndex)));
+    BroadcastParam1 = _runningScriptObjectIndex;
+    Event.BroadcastAndWait("RetunValue = GameDatabase::getObject(param1)");
+    _codeBase = (ReturnValue + 4);
+    _codeIp = _codeBase;
+}
+
+WhenBroadcastReceived(cmd_catch)
+{
+}
+
+WhenBroadcastReceived(cmd_cdone)
+{
+}
+
+WhenBroadcastReceived(cmd_class)
+{
+}
+
+WhenBroadcastReceived(cmd_div)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    If (pop == 0)
+    {
+        Call stack.setTop(0);
+    }
+    Else
+    {
+        Call stack.setTop((top / pop));
+    }
+}
+
+WhenBroadcastReceived(cmd_eq)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    If (top == pop)
+    {
+        Call stack.setTop(-1);
+    }
+    Else
+    {
+        Call stack.setTop(0);
+    }
+}
+
+WhenBroadcastReceived(cmd_exit)
+{
+    Call Not implemented yet("exit");
+}
+
+WhenBroadcastReceived(cmd_extend)
+{
+    Call Not implemented yet("extend");
+}
+
+WhenBroadcastReceived(cmd_false)
+{
+    Call stack.setTop(0);
+}
+
+WhenBroadcastReceived(cmd_functionp)
+{
+}
+
+WhenBroadcastReceived(cmd_ge)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    If (Not ((top < pop)))
+    {
+        Call stack.setTop(-1);
+    }
+    Else
+    {
+        Call stack.setTop(0);
+    }
+}
+
+WhenBroadcastReceived(cmd_getObjectProperty)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    BroadcastParam1 = top;
+    BroadcastParam2 = pop;
+    Event.BroadcastAndWait("ReturnValue = GameDatabase::getObjectProperty(param1, param2)");
+    Call stack.setTop(ReturnValue);
+    Call LOG(Operator.Join("value = ", ReturnValue));
+}
+
+WhenBroadcastReceived(cmd_gt)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    If (top > pop)
+    {
+        Call stack.setTop(-1);
+    }
+    Else
+    {
+        Call stack.setTop(0);
+    }
+}
+
+WhenBroadcastReceived(cmd_le)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    If (Not ((top > pop)))
+    {
+        Call stack.setTop(-1);
+    }
+    Else
+    {
+        Call stack.setTop(0);
+    }
+}
+
+WhenBroadcastReceived(cmd_loadConstant)
+{
+    Call value = readInt16;
+    Call stack.setTop(value);
+    Call LOG(Operator.Join("value = ", value));
+}
+
+WhenBroadcastReceived(cmd_loadVariable)
+{
+    Call value = readInt16;
+    variable = value;
+    Call value = GameDatabase::getVar at index(variable);
+    Call stack.setTop(value);
+    Call LOG(Operator.Join(Operator.Join("variable = ", variable), Operator.Join("; value = ", value)));
+}
+
+WhenBroadcastReceived(cmd_lt)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    If (top < pop)
+    {
+        Call stack.setTop(-1);
+    }
+    Else
+    {
+        Call stack.setTop(0);
+    }
+}
+
+WhenBroadcastReceived(cmd_mod)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    If (pop == 0)
+    {
+        Call stack.setTop(0);
+    }
+    Else
+    {
+        Call stack.setTop((top % pop));
+    }
+}
+
+WhenBroadcastReceived(cmd_mul)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    Call stack.setTop((top * pop));
+}
+
+WhenBroadcastReceived(cmd_not)
+{
+    Call top =_stack.top;
+    If (top == 0)
+    {
+        Call stack.setTop(-1);
+    }
+    Else
+    {
+        Call stack.setTop(0);
+    }
+}
+
+WhenBroadcastReceived(cmd_objectp)
+{
+    Call top =_stack.top;
+    Call class = ObjectV2::getClass for object index(top);
+    If (class < 32766)
+    {
+        Call stack.setTop(-1);
+    }
+    Else
+    {
+        Call stack.setTop(0);
+    }
+}
+
+WhenBroadcastReceived(cmd_print)
+{
+    Call stack.setTop(0);
+}
+
+WhenBroadcastReceived(cmd_printNumber)
+{
+}
+
+WhenBroadcastReceived(cmd_push)
+{
+    Call stack.push;
+}
+
+WhenBroadcastReceived(cmd_rand)
+{
+    Call Not implemented yet("rand");
+}
+
+WhenBroadcastReceived(cmd_randomize)
+{
+    Call Not implemented yet("randomize");
+}
+
+WhenBroadcastReceived(cmd_restart)
+{
+    Call Not implemented yet("restart");
+}
+
+WhenBroadcastReceived(cmd_restore)
+{
+    Call Not implemented yet("restore");
+}
+
+WhenBroadcastReceived(cmd_return)
+{
+    If (_localStackPos == kScriptStackSize)
+    {
+        Call Not implemented yet("cmd_return -> quit");
+    }
+    Call top =_stack.top;
+    funcResult = top;
+    Call stack.setStackPos(_localStackPos);
+    Call pop = stack.pop;
+    _localStackPos = (kScriptStackLimit - pop);
+    Call pop = stack.pop;
+    _runningScriptObjectIndex = pop;
+    BroadcastParam1 = _runningScriptObjectIndex;
+    Event.BroadcastAndWait("RetunValue = GameDatabase::getObject(param1)");
+    _codeBase = (ReturnValue + 4);
+    Call pop = stack.pop;
+    _codeIp = (_codeBase + pop);
+    Call pop = stack.pop;
+    argc = pop;
+    Call stack.free(argc);
+    Call stack.setTop(funcResult);
+    Call pos = getStackPos;
+    Call LOG(Operator.Join("LEAVE: stackPtr = ", Operator.Join(Operator.Join(pos, "; _localStackPos = "), _localStackPos)));
+    Call LOG("");
+}
+
+WhenBroadcastReceived(cmd_save)
+{
+    Call Not implemented yet("save");
+}
+
+WhenBroadcastReceived(cmd_send)
+{
+    Call Not implemented yet("send");
+}
+
+WhenBroadcastReceived(cmd_set)
+{
+    Call value = readInt16;
+    variable = value;
+    Call top =_stack.top;
+    Call GameDatabase::setVar at index(variable) with value(top);
+    Call LOG(Operator.Join(Operator.Join("var(", variable), Operator.Join(") = ", top)));
+}
+
+WhenBroadcastReceived(cmd_setObjectProperty)
+{
+    Call pop = stack.pop;
+    value = pop;
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    BroadcastParam1 = top;
+    BroadcastParam2 = pop;
+    BroadcastParam3 = value;
+    Event.BroadcastAndWait("ReturnValue = GameDatabase::setObjectProperty(param1, param2, param3)");
+    Call stack.setTop(ReturnValue);
+    Call LOG(Operator.Join("value = ", ReturnValue));
+}
+
+WhenBroadcastReceived(cmd_setx)
+{
+}
+
+WhenBroadcastReceived(cmd_snlit)
+{
+}
+
+WhenBroadcastReceived(cmd_split)
+{
+}
+
+WhenBroadcastReceived(cmd_sset)
+{
+}
+
+WhenBroadcastReceived(cmd_sub)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    Call stack.setTop((top - pop));
+}
+
+WhenBroadcastReceived(cmd_svar)
+{
+}
+
+WhenBroadcastReceived(cmd_terpri)
+{
+    Call stack.setTop(0);
+}
+
+WhenBroadcastReceived(cmd_throw)
+{
+}
+
+WhenBroadcastReceived(cmd_tmp)
+{
+    Call value = readByte;
+    Call peek = stack.peek(((_localStackPos - value) - 1));
+    Call stack.setTop(peek);
+    Call LOG(Operator.Join("tempIndex = ", Operator.Join(Operator.Join(value, "; value = "), peek)));
+}
+
+WhenBroadcastReceived(cmd_true)
+{
+    Call stack.setTop(-1);
+}
+
+WhenBroadcastReceived(cmd_tset)
+{
+    Call value = readByte;
+    Call top =_stack.top;
+    Call stack.poke(((_localStackPos - value) - 1))(top);
+    Call LOG(Operator.Join("tempIndex = ", Operator.Join(Operator.Join(value, "; value = "), top)));
+}
+
+WhenBroadcastReceived(cmd_tspace)
+{
+    Call value = readByte;
+    Call stack.alloc(value);
+    Call LOG(Operator.Join("tempCount = ", value));
+}
+
+WhenBroadcastReceived(cmd_varx)
+{
+}
+
+WhenBroadcastReceived(cmd_vectorp)
+{
+}
+
+WhenBroadcastReceived(cmd_vref)
+{
+    Call Not implemented yet("vref");
+}
+
+WhenBroadcastReceived(cmd_vset)
+{
+    Call Not implemented yet("vset");
+}
+
+WhenBroadcastReceived(cmd_vsize)
+{
+    Call Not implemented yet("vsize");
+}
+
+WhenBroadcastReceived(cmd_yorn)
+{
+}
+
+WhenBroadcastReceived(ScriptInterpreter::runScript)
+{
+    _runningScriptObjectIndex = BroadcastParam1;
+    Call pos = getStackPos;
+    _localStackPos = pos;
+    BroadcastParam1 = _runningScriptObjectIndex;
+    Event.BroadcastAndWait("RetunValue = GameDatabase::getObject(param1)");
+    _codeBase = (ReturnValue + 4);
+    _codeIp = _codeBase;
+    Forever
+    {
+        Call value = readByte;
+        opcode = value;
+        Call LOG(Operator.Join(Operator.Join(Operator.Join(Operator.Join(Operator.Join("[", _runningScriptObjectIndex), ":"), (_codeIp - _codeBase)), "] "), commandProcs[((opcode * 2) - 1)]));
+        Event.BroadcastAndWait(commandProcs[((opcode * 2) - 1)]);
+        Call //TODO("Update screen every now and then");
+    }
+}
+
+WhenBroadcastReceived(ScriptInterpreter::ScriptInterpreter)
+{
+    Call ScriptStack::ScriptStack;
+    List.DeleteAll(commandProcs);
+    Call addProc("cmd_branchTrue")("W");
+    Call addProc("cmd_branchFalse")("W");
+    Call addProc("cmd_branch")("W");
+    Call addProc("cmd_true")("");
+    Call addProc("cmd_false")("");
+    Call addProc("cmd_push")("");
+    Call addProc("cmd_not")("");
+    Call addProc("cmd_add")("");
+    Call addProc("cmd_sub")("");
+    Call addProc("cmd_mul")("");
+    Call addProc("cmd_div")("");
+    Call addProc("cmd_mod")("");
+    Call addProc("cmd_band")("");
+    Call addProc("cmd_bor")("");
+    Call addProc("cmd_bnot")("");
+    Call addProc("cmd_lt")("");
+    Call addProc("cmd_eq")("");
+    Call addProc("cmd_gt")("");
+    Call addProc("cmd_loadConstant")("");
+    Call addProc("cmd_loadVariable")("");
+    Call addProc("cmd_getObjectProperty")("");
+    Call addProc("cmd_setObjectProperty")("");
+    Call addProc("cmd_set")("");
+    Call addProc("cmd_print")("");
+    Call addProc("cmd_terpri")("");
+    Call addProc("cmd_printNumber")("");
+    Call addProc("cmd_vref")("");
+    Call addProc("cmd_vset")("");
+    Call addProc("cmd_vsize")("");
+    Call addProc("cmd_exit")("");
+    Call addProc("cmd_return")("");
+    Call addProc("cmd_call")("");
+    Call addProc("cmd_svar")("");
+    Call addProc("cmd_sset")("");
+    Call addProc("cmd_split")("");
+    Call addProc("cmd_snlit")("");
+    Call addProc("cmd_yorn")("");
+    Call addProc("cmd_save")("");
+    Call addProc("cmd_restore")("");
+    Call addProc("cmd_arg")("");
+    Call addProc("cmd_aset")("");
+    Call addProc("cmd_tmp")("");
+    Call addProc("cmd_tset")("");
+    Call addProc("cmd_tspace")("");
+    Call addProc("cmd_class")("");
+    Call addProc("cmd_objectp")("");
+    Call addProc("cmd_vectorp")("");
+    Call addProc("cmd_restart")("");
+    Call addProc("cmd_rand")("");
+    Call addProc("cmd_randomize")("");
+    Call addProc("cmd_send")("");
+    Call addProc("cmd_extend")("");
+    Call addProc("cmd_catch")("");
+    Call addProc("cmd_cdone")("");
+    Call addProc("cmd_throw")("");
+    Call addProc("cmd_functionp")("");
+    Call addProc("cmd_le")("");
+    Call addProc("cmd_ge")("");
+    Call addProc("cmd_varx")("");
+    Call addProc("cmd_setx")("");
+    Call //TODO("Initialise _functions");
+    _localStackPos = 0;
+    _runningScriptObjectIndex = 0;
+}
+
+WhenBroadcastReceived(thumbnail)
+{
+    List.DeleteAll(_stack);
+    List.DeleteAll(commandProcs);
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define //TODO(string comment) (warp=false)
+{
+    List.Add(DEBUG, comment);
+}
+
+Define addProc(string x)(string sig) (warp=false)
+{
+    List.Add(commandProcs, x);
+    List.Add(commandProcs, sig);
+}
+
+Define class = ObjectV2::getClass for object index(string index) (warp=false)
+{
+    i = ObjectV2::objDataOffset[index];
+    class = (ObjectV2::_objData[i] + (ObjectV2::_objData[(i + 1)] * 256));
+}
+
+Define cmd_bor (warp=true)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    value = 0;
+    Repeat (16)
+    {
+        value += ((((pop % 2) == 1) Or ((top % 2) == 1)) * 65536);
+        value = Operator.Round((value / 2));
+        pop = Operator.Round((pop / 2));
+        top = Operator.Round((top / 2));
+    }
+    Call stack.setTop(value);
+}
+
+Define GameDatabase::setVar at index(string index) with value(string value) (warp=false)
+{
+    List.ReplaceItem(_gameState, ((index * 2) + 1), (value % 256));
+    List.ReplaceItem(_gameState, ((index * 2) + 2), floor((value / 256)));
+}
+
+Define LOG(string comment) (warp=false)
+{
+    List.Add(LOG, comment);
+}
+
+Define Not implemented yet(string function) (warp=false)
+{
+    List.Add(DEBUG, function);
+    List.Show(DEBUG);
+    Stop(all);
+}
+
+Define peek = stack.peek(string index) (warp=false)
+{
+    peek = _stack[(index + 1)];
+}
+
+Define pop = stack.pop (warp=false)
+{
+    pop = _stack[(_stackPos + 1)];
+    _stackPos += 1;
+}
+
+Define pos = getStackPos (warp=false)
+{
+    pos = _stackPos;
+}
+
+Define ScriptStack::ScriptStack (warp=true)
+{
+    kScriptStackSize = 1000;
+    kScriptStackLimit = (kScriptStackSize + 1);
+    List.DeleteAll(_stack);
+    Repeat (kScriptStackSize)
+    {
+        List.Add(_stack, 0);
+    }
+    _stackPos = kScriptStackSize;
+}
+
+Define stack.alloc(string count) (warp=false)
+{
+    _stackPos += (0 - count);
+}
+
+Define stack.free(string count) (warp=false)
+{
+    _stackPos += count;
+}
+
+Define stack.poke(string index)(string value) (warp=false)
+{
+    List.ReplaceItem(_stack, (index + 1), value);
+}
+
+Define stack.push (warp=false)
+{
+    Call stack.push(0);
+}
+
+Define stack.push(string value) (warp=false)
+{
+    _stackPos += -1;
+    List.ReplaceItem(_stack, (_stackPos + 1), value);
+}
+
+Define stack.setStackPos(string pos) (warp=false)
+{
+    _stackPos = pos;
+}
+
+Define stack.setTop(string v) (warp=false)
+{
+    List.ReplaceItem(_stack, (_stackPos + 1), v);
+}
+
+Define top =_stack.top (warp=false)
+{
+    top = _stack[(_stackPos + 1)];
+}
+
+Define value = GameDatabase::getVar at index(string index) (warp=false)
+{
+    value = (_gameState[((index * 2) + 1)] + (_gameState[((index * 2) + 2)] * 256));
+}
+
+Define value = readByte (warp=false)
+{
+    value = ObjectV2::_objData[_codeIp];
+    _codeIp += 1;
+}
+
+Define value = readInt16 (warp=false)
+{
+    value = (ObjectV2::_objData[_codeIp] + (ObjectV2::_objData[(_codeIp + 1)] * 256));
+    _codeIp += 2;
+    Call LOG(Operator.Join("readInt16() value = ", value));
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.svg
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

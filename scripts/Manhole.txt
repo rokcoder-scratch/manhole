@@ -1,0 +1,48 @@
+//----- Lists ---------------------------------------------------------------------------------------------------------
+
+buffer = { }
+ObjectV2::_freeData = { }
+ObjectV2::_objSize = { }
+_gameText = { }
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    List.DeleteAll(LOG);
+    List.DeleteAll(DEBUG);
+    List.Hide(DEBUG);
+    False = 0;
+    True = 1;
+    Event.BroadcastAndWait("MadeEngine::MadeEngine");
+    Event.BroadcastAndWait("MadeEngine::run");
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(thumbnail)
+{
+    List.DeleteAll(_dat);
+    List.DeleteAll(_gameState);
+    List.DeleteAll(DEBUG);
+    List.DeleteAll(LOG);
+    List.DeleteAll(ObjectV2::_objData);
+    List.DeleteAll(ObjectV2::objDataOffset);
+}
+
+
+//----- Orphaned blocks -----------------------------------------------------------------------------------------------
+
+Event.BroadcastAndWait("thumbnail")
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.svg
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

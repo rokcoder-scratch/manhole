@@ -1,0 +1,94 @@
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(MadeEngine::MadeEngine)
+{
+    Call //TODO("Variables to initialise");
+    Call //TODO("Various things to initialise");
+    Event.BroadcastAndWait("GameDatabaseV2::GameDatabaseV2");
+    Event.BroadcastAndWait("ScriptInterpreter::ScriptInterpreter");
+    Call //TODO("More things to initialise");
+}
+
+WhenBroadcastReceived(MadeEngine::run)
+{
+    Event.BroadcastAndWait("MusicPlayer::MusicPlayer");
+    Call syncSoundSettings;
+    Call //TODO("initGraphics");
+    Call resetAllTimers;
+    Event.BroadcastAndWait("GameDatabase:open");
+    Event.BroadcastAndWait("ResourceReader::open");
+    Call //TODO("More to implement");
+    BroadcastParam1 = Sensing.Of(_mainCodeObjectIndex, database);
+    Event.BroadcastAndWait("ScriptInterpreter::runScript");
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define //TODO(string comment) (warp=false)
+{
+}
+
+Define allocTimer (warp=true)
+{
+    Call Error("allocTimer Not implemented");
+}
+
+Define Error(string description) (warp=true)
+{
+}
+
+Define freeTimer(string timerNum) (warp=true)
+{
+    Call Error("freeTimer Not implemented");
+}
+
+Define getSavegameFilename(string saveNum) (warp=true)
+{
+    Call Error("getSavegameFilename Not implemented");
+}
+
+Define getTicks (warp=true)
+{
+    Call Error("getTicks Not implemented");
+}
+
+Define getTimer(string timernum) (warp=true)
+{
+    Call Error("getTimer Not implemented");
+}
+
+Define handleEvents (warp=true)
+{
+    Call Error("handleEvents Not implemented");
+}
+
+Define resetAllTimers (warp=true)
+{
+    Call Error("resetAllTimers Not implemented");
+}
+
+Define resetTimer(string timerNum) (warp=true)
+{
+    Call Error("resetTimer Not implemented");
+}
+
+Define setTimer(string timerNum)(string value) (warp=true)
+{
+    Call Error("setTimer Not implemented");
+}
+
+Define syncSoundSettings (warp=true)
+{
+    Call Error("syncSoundSettings Not implemented");
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+costume1.svg
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav
