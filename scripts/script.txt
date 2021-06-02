@@ -1,30 +1,30 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
 argIndex = 0
-class = 32766
-count1 = 4
+class = 32
+count1 = 7
 count2 = 0
-func = 3
-funcResult = 0
-i = 5
-index = 3
+func = 24
+funcResult = 2525
+i = 62603
+index = 0
 kScriptStackLimit = 1001
 kScriptStackSize = 1000
-objectIndex = 85
-opcode = 52
-peek = 10
-pop = 0
-pos = 964
-propertyId = 16
-size = 4
-top = 0
-value = 5
-variable = 10
-_codeBase = 797
-_codeIp = 936
-_localStackPos = 979
-_runningScriptObjectIndex = 27
-_stackPos = 964
+objectIndex = 1830
+opcode = 3
+peek = 2527
+pop = 1
+pos = 986
+propertyId = 20
+size = 7
+top = 2528
+value = 18
+variable = 1
+_codeBase = 428
+_codeIp = 446
+_localStackPos = 990
+_runningScriptObjectIndex = 19
+_stackPos = 986
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------
@@ -34,6 +34,12 @@ _stack = { }
 
 
 //----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(clear data)
+{
+    List.DeleteAll(_stack);
+    List.DeleteAll(commandProcs);
+}
 
 WhenBroadcastReceived(cmd_add)
 {
@@ -598,7 +604,7 @@ WhenBroadcastReceived(ScriptInterpreter::runScript)
         opcode = value;
         Call LOG(Operator.Join(Operator.Join(Operator.Join(Operator.Join(Operator.Join("[", _runningScriptObjectIndex), ":"), (_codeIp - _codeBase)), "] "), commandProcs[((opcode * 2) - 1)]));
         Event.BroadcastAndWait(commandProcs[((opcode * 2) - 1)]);
-        Call //TODO("Update screen every now and then");
+        Event.BroadcastAndWait("process graphics queue");
     }
 }
 
@@ -670,12 +676,6 @@ WhenBroadcastReceived(ScriptInterpreter::ScriptInterpreter)
     Event.BroadcastAndWait("ScriptFunctions::setupExternalsTable");
     _localStackPos = 0;
     _runningScriptObjectIndex = 0;
-}
-
-WhenBroadcastReceived(thumbnail)
-{
-    List.DeleteAll(_stack);
-    List.DeleteAll(commandProcs);
 }
 
 

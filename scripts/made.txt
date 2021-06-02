@@ -1,7 +1,41 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+mouseDown = 
+_eventKey = 0
+_eventMouseX = 0
+_eventMouseY = 0
+
+
+
 //----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(MadeEngine::handleEvents)
+{
+    _eventMouseX = Sensing.MouseX();
+    _eventMouseY = Sensing.MouseY();
+    If (Not ((mouseDown == Sensing.MouseDown())))
+    {
+        mouseDown = Sensing.MouseDown();
+        If Sensing.MouseDown()
+        {
+            _eventNum = 2;
+        }
+        Else
+        {
+            _eventNum = 1;
+        }
+    }
+    Call //TODO("Right mouse button handling");
+    Call //TODO("Handle key presses");
+}
 
 WhenBroadcastReceived(MadeEngine::MadeEngine)
 {
+    mouseDown = Sensing.MouseDown();
+    _eventNum = 0;
+    _eventMouseX = 0;
+    _eventMouseY = 0;
+    _eventKey = 0;
     Call //TODO("Variables to initialise");
     Call //TODO("Various things to initialise");
     Event.BroadcastAndWait("GameDatabaseV2::GameDatabaseV2");
@@ -56,11 +90,6 @@ Define getTicks (warp=true)
 Define getTimer(string timernum) (warp=true)
 {
     Call Error("getTimer Not implemented");
-}
-
-Define handleEvents (warp=true)
-{
-    Call Error("handleEvents Not implemented");
 }
 
 Define resetAllTimers (warp=true)

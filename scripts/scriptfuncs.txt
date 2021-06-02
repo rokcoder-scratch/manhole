@@ -1,3 +1,9 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+eventNum = 1
+
+
+
 //----- Broadcast received events -------------------------------------------------------------------------------------
 
 WhenBroadcastReceived(ScriptFunctions::ScriptFunctions)
@@ -95,7 +101,7 @@ WhenBroadcastReceived(sfClearMono)
 WhenBroadcastReceived(sfClearScreen)
 {
     Call //TODO("a few bits and bobs should happen in here");
-    Pen.Clear();
+    List.Add(Gfx.queue, Sensing.Of(command.clearScr, gfx));
     ReturnValue = 0;
 }
 
@@ -121,7 +127,13 @@ WhenBroadcastReceived(sfDrawMenu)
 
 WhenBroadcastReceived(sfDrawPicture)
 {
-    Call Not implemented yet("DrawPicture");
+    List.Add(Gfx.queue, Sensing.Of(command.drawPic, gfx));
+    List.Add(Gfx.queue, argv[5]);
+    List.Add(Gfx.queue, argv[4]);
+    List.Add(Gfx.queue, argv[3]);
+    List.Add(Gfx.queue, argv[2]);
+    List.Add(Gfx.queue, argv[1]);
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfDrawSprite)
@@ -191,7 +203,7 @@ WhenBroadcastReceived(sfGetGameDescription)
 
 WhenBroadcastReceived(sfGetKey)
 {
-    Call Not implemented yet("GetKey");
+    ReturnValue = Sensing.Of(_eventKey, made);
 }
 
 WhenBroadcastReceived(sfGetMenuCount)
@@ -201,12 +213,12 @@ WhenBroadcastReceived(sfGetMenuCount)
 
 WhenBroadcastReceived(sfGetMouseX)
 {
-    Call Not implemented yet("GetMouseX");
+    ReturnValue = Sensing.Of(_eventMouseX, made);
 }
 
 WhenBroadcastReceived(sfGetMouseY)
 {
-    Call Not implemented yet("GetMouseY");
+    ReturnValue = Sensing.Of(_eventMouseY, made);
 }
 
 WhenBroadcastReceived(sfGetMusicBeat)
@@ -366,7 +378,10 @@ WhenBroadcastReceived(sfPlayVoice)
 
 WhenBroadcastReceived(sfPollEvent)
 {
-    Call Not implemented yet("PollEvent");
+    Event.BroadcastAndWait("MadeEngine::handleEvents");
+    eventNum = _eventNum;
+    _eventNum = 0;
+    ReturnValue = eventNum;
 }
 
 WhenBroadcastReceived(sfPrintf)
@@ -521,7 +536,8 @@ WhenBroadcastReceived(sfSetTimer)
 
 WhenBroadcastReceived(sfSetVisualEffect)
 {
-    Call Not implemented yet("SetVisualEffect");
+    Call //TODO("This should do something funky with visual effects");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfShakeScreen)
@@ -536,7 +552,8 @@ WhenBroadcastReceived(sfShowMouseCursor)
 
 WhenBroadcastReceived(sfShowPage)
 {
-    Call Not implemented yet("ShowPage");
+    Call //TODO("Should this set a flag to tell the system to update the graphics (rather than updating each frame if updates are in the queue)?");
+    ReturnValue = 56;
 }
 
 WhenBroadcastReceived(sfSoundPlaying)
@@ -594,7 +611,7 @@ WhenBroadcastReceived(stopSound)
 
 Define //TODO(string comment) (warp=false)
 {
-    List.Add(DEBUG, function);
+    List.Add(DEBUG, comment);
     List.Show(DEBUG);
 }
 

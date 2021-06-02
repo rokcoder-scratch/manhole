@@ -5,3 +5,4 @@
 "script"
 "scriptfuncs"
 "gfx"
+"game data"

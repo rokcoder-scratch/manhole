@@ -1,3 +1,76 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+command = 2
+command.clearScr = 1
+command.drawPic = 2
+flipX = 0
+flipY = 0
+i = 1
+
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(initialise graphics queue)
+{
+    command.clearScr = 1;
+    command.drawPic = 2;
+}
+
+WhenBroadcastReceived(process graphics queue)
+{
+    Call process graphics queue;
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define //TODO(string comment) (warp=false)
+{
+    List.Add(DEBUG, comment);
+    List.Show(DEBUG);
+}
+
+Define process graphics queue (warp=true)
+{
+    i = 1;
+    Repeat Until (i > List.Length(Gfx.queue))
+    {
+        command = Gfx.queue[i];
+        i += 1;
+        If (command == command.clearScr)
+        {
+            Pen.Clear();
+        }
+        Else
+        {
+            If (command == command.drawPic)
+            {
+                Looks.SwitchCostumeTo(Operator.Join("flex-", Gfx.queue[i]));
+                i += 1;
+                Motion.SetX(Gfx.queue[i]);
+                i += 1;
+                Motion.SetY(Gfx.queue[i]);
+                i += 1;
+                flipX = Gfx.queue[i];
+                i += 1;
+                flipY = Gfx.queue[i];
+                i += 1;
+                If (Not (((flipX == 0) And (flipY == 0))))
+                {
+                    Call //TODO(Operator.Join(Operator.Join(Operator.Join(Operator.Join("flipX and/or flipY need implementing (flipX = ", flipX), ", flipY = "), flipY), ")"));
+                }
+                Pen.Stamp();
+            }
+            Else
+            {
+            }
+        }
+    }
+    List.DeleteAll(Gfx.queue);
+}
+
+
 //----- Costumes ------------------------------------------------------------------------------------------------------
 
 flex-1.png
