@@ -3,11 +3,12 @@
 argc = 0
 BroadcastParam1 = 69
 BroadcastParam2 = 21
-BroadcastParam3 = 1
+BroadcastParam3 = 726
 Debug? = 0
 False = 0
 Log? = 0
-ReturnValue = 2466
+MusicPlaying = 0
+ReturnValue = 0
 screenLock = 
 SoundsActiveCount = 0
 True = 1

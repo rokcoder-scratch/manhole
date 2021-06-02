@@ -3,7 +3,7 @@
 class = 32
 count1 = 10
 count2 = 6
-dataIndex = 98336
+dataIndex = 75172
 i = 34
 objectCount = 4210
 objectsOffs = 1024
@@ -13,12 +13,12 @@ parentObjectIndex = 32
 property = 0
 propertyIndex = 1088
 propIndex = 1068
-propIndex1 = 98336
-propIndex2 = 98330
+propIndex1 = 75172
+propIndex2 = 75166
 sourceS = 107028
 textOffs = 512
 textSize = 512
-value = 1
+value = 726
 varObjectCount = 4210
 _gameStateSize = 96
 _mainCodeObjectIndex = 69
@@ -170,22 +170,17 @@ Define count2 = ObjectV2::getCount2 for object#(string index) (warp=false)
 
 Define dataIndex = GameDatabaseV2::findObjectProperty for objectIndex(string objectIndex) with propertyId(string propertyId) (warp=false)
 {
-    Call LOG(Operator.Join(Operator.Join(Operator.Join(Operator.Join("findObjectProperty(", objectIndex), ", "), propertyId), ")"));
     Call class = ObjectV2::getClass for object#(objectIndex);
     If (class > 32765)
     {
         Call ERROR("findObjectProperty: Not an object");
     }
     propIndex = (ObjectV2::objDataOffset[objectIndex] + 4);
-    Call LOG(Operator.Join("class = ", class));
     Call count1 = ObjectV2::getCount1 for object#(objectIndex);
     Call count2 = ObjectV2::getCount2 for object#(objectIndex);
-    Call LOG(Operator.Join("count1 = ", count1));
-    Call LOG(Operator.Join("count2 = ", count2));
     i = 0;
     Repeat (((count1 + count2) * 2))
     {
-        Call LOG(ObjectV2::_objData[(propIndex + i)]);
         i += 1;
     }
     propIndex1 = (propIndex + (count1 * 2));
@@ -193,11 +188,8 @@ Define dataIndex = GameDatabaseV2::findObjectProperty for objectIndex(string obj
     Repeat Until (count2 == 0)
     {
         count2 += -1;
-        Call LOG(Operator.Join("count2 = ", count2));
-        Call LOG(Operator.Join("check propertyId against ", ((ObjectV2::_objData[propIndex] + (ObjectV2::_objData[(propIndex + 1)] * 256)) % 32768)));
         If (((ObjectV2::_objData[propIndex] + (ObjectV2::_objData[(propIndex + 1)] * 256)) % 32768) == propertyId)
         {
-            Call LOG("Match!");
             dataIndex = propIndex1;
             Stop(this script);
         }
@@ -213,16 +205,12 @@ Define dataIndex = GameDatabaseV2::findObjectProperty for objectIndex(string obj
     }
     Repeat Until (parentObjectIndex == 0)
     {
-        Call LOG(Operator.Join("parentObjectIndex = ", parentObjectIndex));
         propIndex = (ObjectV2::objDataOffset[parentObjectIndex] + 4);
         Call count1 = ObjectV2::getCount1 for object#(parentObjectIndex);
         Call count2 = ObjectV2::getCount2 for object#(parentObjectIndex);
-        Call LOG(Operator.Join("count1 = ", count1));
-        Call LOG(Operator.Join("count2 = ", count2));
         i = 0;
         Repeat (((count1 + count2) * 2))
         {
-            Call LOG(ObjectV2::_objData[(propIndex + i)]);
             i += 1;
         }
         propIndex1 = (propIndex2 + ((count1 - count2) * 2));
@@ -230,13 +218,10 @@ Define dataIndex = GameDatabaseV2::findObjectProperty for objectIndex(string obj
         Repeat Until (count2 == 0)
         {
             count2 += -1;
-            Call LOG(Operator.Join("count2 = ", count2));
-            Call LOG(Operator.Join("check propertyId against ", (ObjectV2::_objData[propIndex] + (ObjectV2::_objData[(propIndex + 1)] * 256))));
             If ((ObjectV2::_objData[propIndex] + (ObjectV2::_objData[(propIndex + 1)] * 256)) < 32768)
             {
                 If (((ObjectV2::_objData[propIndex] + (ObjectV2::_objData[(propIndex + 1)] * 256)) % 32768) == propertyId)
                 {
-                    Call LOG("Match1!");
                     dataIndex = propIndex1;
                     Stop(this script);
                 }
@@ -249,7 +234,6 @@ Define dataIndex = GameDatabaseV2::findObjectProperty for objectIndex(string obj
             {
                 If (((ObjectV2::_objData[propIndex] + (ObjectV2::_objData[(propIndex + 1)] * 256)) % 32768) == propertyId)
                 {
-                    Call LOG("Match2!");
                     dataIndex = propertyIndex;
                     Stop(this script);
                 }

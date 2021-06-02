@@ -2,8 +2,8 @@
 
 mouseDown = 
 _eventKey = 0
-_eventMouseX = 58
-_eventMouseY = -30.666666666667
+_eventMouseX = 2.6666666666667
+_eventMouseY = 106
 
 
 

@@ -1,3 +1,64 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+clone? = 0
+duration = 0
+numLoops = 1
+onlyEmulate = 0
+startFrame = 0
+track = Track18
+
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(initialise sfx)
+{
+    clone? = False;
+    MusicPlaying = False;
+}
+
+WhenBroadcastReceived(music play)
+{
+    If (clone? == False)
+    {
+        track = (BroadcastParam1 - 1);
+        If (track < 10)
+        {
+            track = Operator.Join(0, track);
+        }
+        track = Operator.Join("Track", track);
+        numLoops = 1;
+        Control.CreateCloneOf(_myself_);
+    }
+}
+
+WhenBroadcastReceived(stop music)
+{
+    If (clone? == True)
+    {
+        Control.DeleteThisClone();
+    }
+    Else
+    {
+        MusicPlaying = False;
+    }
+}
+
+
+//----- Start as clone ------------------------------------------------------------------------------------------------
+
+Control.WhenIStartAsClone()
+{
+    clone? = True;
+    MusicPlaying += True;
+    Repeat (numLoops)
+    {
+        Sound.PlayUntilDone(track);
+    }
+    MusicPlaying += False;
+}
+
+
 //----- Costumes ------------------------------------------------------------------------------------------------------
 
 costume1.svg

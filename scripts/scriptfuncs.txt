@@ -1,7 +1,9 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
+deltaTime = 25707
 eventNum = 0
 _autoStopSound = 0
+_cdTimeStart = 277.221
 _soundStarted = 1
 
 
@@ -151,14 +153,27 @@ WhenBroadcastReceived(sfFreeTimer)
 
 WhenBroadcastReceived(sfGetCdStatus)
 {
-    Call //TODO("GetCdStatus");
-    ReturnValue = 32000;
+    If (MusicPlaying == True)
+    {
+        ReturnValue = 1;
+    }
+    Else
+    {
+        ReturnValue = 0;
+    }
 }
 
 WhenBroadcastReceived(sfGetCdTime)
 {
-    Call //TODO("GetCdTime");
-    ReturnValue = 32000;
+    If (MusicPlaying == True)
+    {
+        deltaTime = ((Sensing.Timer() - _cdTimeStart) * 1000);
+        ReturnValue = (((deltaTime / 1000) * 30) + (((deltaTime % 1000) / 75) * (30 / 75)));
+    }
+    Else
+    {
+        ReturnValue = 32000;
+    }
 }
 
 WhenBroadcastReceived(sfGetKey)
@@ -219,8 +234,10 @@ WhenBroadcastReceived(sfLoadResText)
 
 WhenBroadcastReceived(sfPlayCd)
 {
-    Call //TODO("PlayCD");
-    ReturnValue = 0;
+    BroadcastParam1 = argv[1];
+    Event.BroadcastAndWait("music play");
+    _cdTimeStart = Sensing.Timer();
+    ReturnValue = 1;
 }
 
 WhenBroadcastReceived(sfPlayCdSegment)
@@ -382,8 +399,15 @@ WhenBroadcastReceived(sfSoundPlaying)
 
 WhenBroadcastReceived(sfStopCd)
 {
-    Call //TODO("StopCD");
-    ReturnValue = 0;
+    If (MusicPlaying == True)
+    {
+        Event.BroadcastAndWait("stop music");
+        ReturnValue = 1;
+    }
+    Else
+    {
+        ReturnValue = 0;
+    }
 }
 
 WhenBroadcastReceived(sfStopMusic)

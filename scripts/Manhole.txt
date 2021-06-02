@@ -2,9 +2,10 @@
 
 WhenGreenFlagClicked()
 {
-    Debug? = True;
     Pen.Clear();
     Event.BroadcastAndWait("clear data");
+    Debug? = True;
+    Log? = False;
     Event.BroadcastAndWait("initialise graphics queue");
     Event.BroadcastAndWait("initialise sfx");
     Event.BroadcastAndWait("MadeEngine::MadeEngine");

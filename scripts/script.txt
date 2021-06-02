@@ -2,26 +2,26 @@
 
 argIndex = 3
 class = 32766
-count1 = 12
+count1 = 20
 count2 = 0
 func = 6
 funcResult = 0
-i = 0
-index = 11
+i = 1
+index = 38
 kScriptStackLimit = 1001
 kScriptStackSize = 1000
-objectIndex = 3893
-opcode = 52
-peek = 3893
+objectIndex = 2985
+opcode = 
+peek = 2985
 pop = 1
 pos = 999
 propertyId = 19
-size = 12
+size = 20
 top = 0
-value = 0
+value = 
 variable = 18
 _codeBase = 2470
-_codeIp = 2510
+_codeIp = 611180
 _localStackPos = 1000
 _runningScriptObjectIndex = 69
 _stackPos = 999
@@ -188,7 +188,16 @@ WhenBroadcastReceived(cmd_extend)
         List.Add(argv, peek);
         i += 1;
     }
+    Call LOG(Operator.Join(Operator.Join(Operator.Join(Operator.Join(Operator.Join("func = ", func), " ("), ScriptFuncs::_externalFuncs[(func + 1)]), "); argc = "), argc));
+    i = 1;
+    Repeat (argc)
+    {
+        Call LOG(Operator.Join(Operator.Join(Operator.Join("argv[", (i - 1)), "] = "), argv[i]));
+        i += 1;
+    }
+    Call LOG(ScriptFuncs::_externalFuncs[(func + 1)]);
     Event.BroadcastAndWait(ScriptFuncs::_externalFuncs[(func + 1)]);
+    Call LOG(Operator.Join("result = ", ReturnValue));
     Call stack.free(argc);
     Call stack.setTop(ReturnValue);
 }
@@ -554,10 +563,12 @@ WhenBroadcastReceived(cmd_vref)
     index = pop;
     Call top =_stack.top;
     objectIndex = top;
+    Call LOG(Operator.Join(Operator.Join(Operator.Join("index = ", index), "; objectIndex = "), objectIndex));
     If (objectIndex > 0)
     {
         Call value = ObjectV2::getVectorItem(index) for object index(objectIndex);
     }
+    Call LOG(Operator.Join("--> value = ", value));
     Call stack.setTop(value);
 }
 
