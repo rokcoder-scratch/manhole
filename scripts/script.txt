@@ -2,23 +2,23 @@
 
 argc = 2
 argIndex = 0
-class = 32766
-funcResult = 0
-i = 3508
+class = 28
+funcResult = 3181
+i = 79836
 kScriptStackLimit = 1001
 kScriptStackSize = 1000
-opcode = 46
-peek = 109
-pop = 4211
+opcode = 42
+peek = 4211
+pop = 1
 pos = 986
-top = 109
-value = 46
+top = 3182
+value = 1
 variable = 1
 _codeBase = 428
-_codeIp = 458
-_localStackPos = 990
-_runningScriptObjectIndex = 19
-_stackPos = 986
+_codeIp = 451
+_localStackPos = 0
+_runningScriptObjectIndex = 0
+_stackPos = 1000
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------
@@ -42,6 +42,7 @@ WhenBroadcastReceived(cmd_arg)
     argIndex = value;
     Call peek = stack.peek(((_localStackPos + 4) + argIndex));
     Call stack.setTop(peek);
+    Call LOG(Operator.Join("argIndex = ", Operator.Join(Operator.Join(value, "; value = "), peek)));
 }
 
 WhenBroadcastReceived(cmd_aset)
@@ -393,7 +394,6 @@ WhenBroadcastReceived(cmd_setObjectProperty)
     BroadcastParam3 = value;
     Event.BroadcastAndWait("ReturnValue = GameDatabase::setObjectProperty(param1, param2, param3)");
     Call stack.setTop(ReturnValue);
-    Call LOG(Operator.Join("value = ", ReturnValue));
 }
 
 WhenBroadcastReceived(cmd_setx)
