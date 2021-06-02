@@ -100,7 +100,7 @@ WhenBroadcastReceived(sfClearMono)
 
 WhenBroadcastReceived(sfClearScreen)
 {
-    Call //TODO("a few bits and bobs should happen in here");
+    Call //TODO (quietly)("a few bits and bobs should happen in here");
     List.Add(Gfx.queue, Sensing.Of(command.clearScr, gfx));
     ReturnValue = 0;
 }
@@ -178,12 +178,14 @@ WhenBroadcastReceived(sfGetAnimFrameCount)
 
 WhenBroadcastReceived(sfGetCdStatus)
 {
-    Call Not implemented yet("GetCdStatus");
+    Call //TODO("GetCdStatus");
+    ReturnValue = 32000;
 }
 
 WhenBroadcastReceived(sfGetCdTime)
 {
-    Call Not implemented yet("GetCdTime");
+    Call //TODO("GetCdTime");
+    ReturnValue = 32000;
 }
 
 WhenBroadcastReceived(sfGetChannelState)
@@ -259,6 +261,7 @@ WhenBroadcastReceived(sfGetTimer)
 WhenBroadcastReceived(sfHideMouseCursor)
 {
     Call //TODO("HideMouseCursor");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfHomeText)
@@ -338,7 +341,8 @@ WhenBroadcastReceived(sfPlaceText)
 
 WhenBroadcastReceived(sfPlayCd)
 {
-    Call Not implemented yet("PlayCd");
+    Call //TODO("PlayCD");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfPlayCdSegment)
@@ -363,7 +367,17 @@ WhenBroadcastReceived(sfPlayNote)
 
 WhenBroadcastReceived(sfPlaySound)
 {
-    Call Not implemented yet("PlaySound");
+    If (argc == 1)
+    {
+        BroadcastParam1 = argv[1];
+    }
+    Else
+    {
+        BroadcastParam1 = argv[2];
+    }
+    Event.BroadcastAndWait("sfx play");
+    Call //TODO (quietly)("Various stop and autoStop stuff to add");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfPlayTele)
@@ -481,7 +495,8 @@ WhenBroadcastReceived(sfSetPaletteLock)
 
 WhenBroadcastReceived(sfSetScreenLock)
 {
-    Call Not implemented yet("SetScreenLock");
+    Call //TODO("SetScreenLock");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfSetSoundRate)
@@ -548,11 +563,13 @@ WhenBroadcastReceived(sfShakeScreen)
 WhenBroadcastReceived(sfShowMouseCursor)
 {
     Call //TODO("ShowMouseCursor");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfShowPage)
 {
-    Call //TODO("Should this set a flag to tell the system to update the graphics (rather than updating each frame if updates are in the queue)?");
+    Call //TODO (quietly)("Should this set a flag to tell the system to update the graphics (rather than updating each frame if updates are in the queue)?");
+    Event.BroadcastAndWait("process graphics queue");
     ReturnValue = 56;
 }
 
@@ -563,7 +580,8 @@ WhenBroadcastReceived(sfSoundPlaying)
 
 WhenBroadcastReceived(sfStopCd)
 {
-    Call Not implemented yet("StopCd");
+    Call //TODO("StopCD");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfStopMusic)
@@ -615,6 +633,10 @@ Define //TODO(string comment) (warp=false)
     List.Show(DEBUG);
 }
 
+Define //TODO (quietly)(string comment) (warp=false)
+{
+}
+
 Define Not implemented yet(string function) (warp=false)
 {
     List.DeleteAll(DEBUG);
@@ -622,6 +644,15 @@ Define Not implemented yet(string function) (warp=false)
     List.Show(DEBUG);
     Stop(all);
 }
+
+
+//----- Orphaned blocks -----------------------------------------------------------------------------------------------
+
+Call //TODO("")
+
+Call Not implemented yet("StopCd")
+
+Call Not implemented yet("GetCdStatus")
 
 
 //----- Costumes ------------------------------------------------------------------------------------------------------
