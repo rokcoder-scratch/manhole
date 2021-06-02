@@ -1,30 +1,30 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-argIndex = 0
-class = 32
-count1 = 7
+argIndex = 1
+class = 32766
+count1 = 20
 count2 = 0
-func = 24
-funcResult = 2525
-i = 62603
-index = 0
+func = 8
+funcResult = -1
+i = 0
+index = 19
 kScriptStackLimit = 1001
 kScriptStackSize = 1000
-objectIndex = 1830
-opcode = 3
-peek = 2527
-pop = 1
-pos = 986
-propertyId = 20
-size = 7
-top = 2528
-value = 18
-variable = 1
-_codeBase = 428
-_codeIp = 446
-_localStackPos = 990
-_runningScriptObjectIndex = 19
-_stackPos = 986
+objectIndex = 2171
+opcode = 41
+peek = 220
+pop = 179
+pos = 967
+propertyId = 18
+size = 20
+top = 220
+value = 41
+variable = 10
+_codeBase = 53097
+_codeIp = 53108
+_localStackPos = 967
+_runningScriptObjectIndex = 2168
+_stackPos = 962
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------
@@ -59,7 +59,10 @@ WhenBroadcastReceived(cmd_arg)
 
 WhenBroadcastReceived(cmd_aset)
 {
-    Call Not implemented yet("aset");
+    Call value = readByte;
+    argIndex = value;
+    Call top =_stack.top;
+    Call stack.poke(((_localStackPos + 4) + argIndex))(top);
 }
 
 WhenBroadcastReceived(cmd_band)
@@ -69,7 +72,7 @@ WhenBroadcastReceived(cmd_band)
 
 WhenBroadcastReceived(cmd_bnot)
 {
-    Call Not implemented yet("bnot");
+    Call cmd_bnot;
 }
 
 WhenBroadcastReceived(cmd_bor)
@@ -604,7 +607,6 @@ WhenBroadcastReceived(ScriptInterpreter::runScript)
         opcode = value;
         Call LOG(Operator.Join(Operator.Join(Operator.Join(Operator.Join(Operator.Join("[", _runningScriptObjectIndex), ":"), (_codeIp - _codeBase)), "] "), commandProcs[((opcode * 2) - 1)]));
         Event.BroadcastAndWait(commandProcs[((opcode * 2) - 1)]);
-        Event.BroadcastAndWait("process graphics queue");
     }
 }
 
@@ -708,6 +710,19 @@ Define cmd_band (warp=true)
         value += ((((pop % 2) == 1) And ((top % 2) == 1)) * 65536);
         value = Operator.Round((value / 2));
         pop = Operator.Round((pop / 2));
+        top = Operator.Round((top / 2));
+    }
+    Call stack.setTop(value);
+}
+
+Define cmd_bnot (warp=true)
+{
+    Call top =_stack.top;
+    value = 0;
+    Repeat (16)
+    {
+        value += (((top % 2) == 0) * 65536);
+        value = Operator.Round((value / 2));
         top = Operator.Round((top / 2));
     }
     Call stack.setTop(value);

@@ -2,8 +2,8 @@
 
 mouseDown = 
 _eventKey = 0
-_eventMouseX = 0
-_eventMouseY = 0
+_eventMouseX = 220
+_eventMouseY = 123
 
 
 
@@ -11,8 +11,8 @@ _eventMouseY = 0
 
 WhenBroadcastReceived(MadeEngine::handleEvents)
 {
-    _eventMouseX = Sensing.MouseX();
-    _eventMouseY = Sensing.MouseY();
+    _eventMouseX = (Sensing.MouseX() + 160);
+    _eventMouseY = (100 - Sensing.MouseY());
     If (Not ((mouseDown == Sensing.MouseDown())))
     {
         mouseDown = Sensing.MouseDown();

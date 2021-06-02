@@ -6,3 +6,4 @@
 "scriptfuncs"
 "gfx"
 "game data"
+"sfx"
