@@ -3,9 +3,12 @@
 command = 2
 command.clearScr = 1
 command.drawPic = 2
-flipX = 0
-flipY = 0
-i = 32
+costume = flex-289
+costumeNumber = 289
+flipX = 
+flipY = 
+i = 20
+time = 714.77
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------
@@ -1737,11 +1740,22 @@ WhenBroadcastReceived(initialise graphics queue)
 {
     command.clearScr = 1;
     command.drawPic = 2;
+    Looks.SetSizeTo(150);
+    Motion.SetRotationStyle(left-right);
 }
 
 WhenBroadcastReceived(process graphics queue)
 {
+    If (screenLock == True)
+    {
+        Stop(this script);
+    }
     Call process graphics queue;
+    time = Sensing.Timer();
+    Repeat Until (Sensing.Timer() > (time + 0.1))
+    {
+        Event.BroadcastAndWait("MadeEngine::handleEvents");
+    }
 }
 
 
@@ -1768,20 +1782,27 @@ Define process graphics queue (warp=true)
         {
             If (command == command.drawPic)
             {
-                Looks.SwitchCostumeTo(Operator.Join("flex-", Gfx.queue[i]));
+                costume = Operator.Join("flex-", Gfx.queue[i]);
+                Looks.SwitchCostumeTo(costume);
+                costumeNumber = Costume.GetNumberName(number);
+                Looks.SwitchCostumeTo(scaler);
+                Looks.SetSizeTo(1000);
                 i += 1;
-                Motion.SetX(((Gfx.queue[i] + (costume dimensions[((Costume.GetNumberName(number) * 2) - 1)] / 2)) - 160));
+                Motion.SetX((((Gfx.queue[i] + (costume dimensions[((costumeNumber * 2) - 1)] / 2)) - 160) * 1.5));
                 i += 1;
-                Motion.SetY(((100 - Gfx.queue[i]) - (costume dimensions[(Costume.GetNumberName(number) * 2)] / 2)));
+                Motion.SetY((((100 - Gfx.queue[i]) - (costume dimensions[(costumeNumber * 2)] / 2)) * 1.5));
                 i += 1;
-                flipX = Gfx.queue[i];
+                flipX = (Gfx.queue[i] == -1);
                 i += 1;
-                flipY = Gfx.queue[i];
+                flipY = (Gfx.queue[i] == -1);
                 i += 1;
-                If (Not (((flipX == 0) And (flipY == 0))))
+                If (flipY == True)
                 {
-                    Call //TODO(Operator.Join(Operator.Join(Operator.Join(Operator.Join("flipX and/or flipY need implementing (flipX = ", flipX), ", flipY = "), flipY), ")"));
+                    Call //TODO("flipY needs implementing");
                 }
+                Motion.PointInDirection((90 + (180 * (flipX == True))));
+                Looks.SetSizeTo(150);
+                Looks.SwitchCostumeTo(costume);
                 Pen.Stamp();
             }
             Else
@@ -1791,6 +1812,13 @@ Define process graphics queue (warp=true)
     }
     List.DeleteAll(Gfx.queue);
 }
+
+
+//----- Orphaned blocks -----------------------------------------------------------------------------------------------
+
+flex-858
+
+scaler
 
 
 //----- Costumes ------------------------------------------------------------------------------------------------------
@@ -2653,6 +2681,7 @@ flex-855.png
 flex-856.png
 flex-857.png
 flex-858.png
+scaler.svg
 
 
 //----- Sounds --------------------------------------------------------------------------------------------------------

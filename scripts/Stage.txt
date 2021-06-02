@@ -1,11 +1,15 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-argc = 2
-BroadcastParam1 = 2168
-BroadcastParam2 = 18
-BroadcastParam3 = 1366
+argc = 0
+BroadcastParam1 = 69
+BroadcastParam2 = 21
+BroadcastParam3 = 1
+Debug? = 0
 False = 0
-ReturnValue = 53093
+Log? = 0
+ReturnValue = 2466
+screenLock = 
+SoundsActiveCount = 0
 True = 1
 _eventNum = 0
 

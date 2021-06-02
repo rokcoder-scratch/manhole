@@ -1,30 +1,30 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-argIndex = 1
+argIndex = 3
 class = 32766
-count1 = 20
+count1 = 12
 count2 = 0
-func = 8
-funcResult = -1
+func = 6
+funcResult = 0
 i = 0
-index = 19
+index = 11
 kScriptStackLimit = 1001
 kScriptStackSize = 1000
-objectIndex = 2171
-opcode = 41
-peek = 220
-pop = 179
-pos = 967
-propertyId = 18
-size = 20
-top = 220
-value = 41
-variable = 10
-_codeBase = 53097
-_codeIp = 53108
-_localStackPos = 967
-_runningScriptObjectIndex = 2168
-_stackPos = 962
+objectIndex = 3893
+opcode = 52
+peek = 3893
+pop = 1
+pos = 999
+propertyId = 19
+size = 12
+top = 0
+value = 0
+variable = 18
+_codeBase = 2470
+_codeIp = 2510
+_localStackPos = 1000
+_runningScriptObjectIndex = 69
+_stackPos = 999
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------
@@ -704,6 +704,14 @@ Define cmd_band (warp=true)
 {
     Call pop = stack.pop;
     Call top =_stack.top;
+    If (pop < 0)
+    {
+        pop += 65536;
+    }
+    If (top < 0)
+    {
+        top += 65536;
+    }
     value = 0;
     Repeat (16)
     {
@@ -712,18 +720,30 @@ Define cmd_band (warp=true)
         pop = Operator.Round((pop / 2));
         top = Operator.Round((top / 2));
     }
+    If (value > 32767)
+    {
+        value += -65536;
+    }
     Call stack.setTop(value);
 }
 
 Define cmd_bnot (warp=true)
 {
     Call top =_stack.top;
+    If (top < 0)
+    {
+        top += 65536;
+    }
     value = 0;
     Repeat (16)
     {
         value += (((top % 2) == 0) * 65536);
         value = Operator.Round((value / 2));
         top = Operator.Round((top / 2));
+    }
+    If (value > 32767)
+    {
+        value += -65536;
     }
     Call stack.setTop(value);
 }
@@ -732,6 +752,14 @@ Define cmd_bor (warp=true)
 {
     Call pop = stack.pop;
     Call top =_stack.top;
+    If (pop < 65536)
+    {
+        pop += 65536;
+    }
+    If (top < 0)
+    {
+        top += 65536;
+    }
     value = 0;
     Repeat (16)
     {
@@ -739,6 +767,10 @@ Define cmd_bor (warp=true)
         value = Operator.Round((value / 2));
         pop = Operator.Round((pop / 2));
         top = Operator.Round((top / 2));
+    }
+    If (value > 32767)
+    {
+        value += -65536;
     }
     Call stack.setTop(value);
 }
@@ -770,7 +802,10 @@ Define GameDatabase::setVar at index(string index) with value(string value) (war
 
 Define LOG(string comment) (warp=false)
 {
-    List.Add(LOG, comment);
+    If (Log? == True)
+    {
+        List.Add(LOG, comment);
+    }
 }
 
 Define Not implemented yet(string function) (warp=false)

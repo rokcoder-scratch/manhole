@@ -1,6 +1,8 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-eventNum = 1
+eventNum = 0
+_autoStopSound = 0
+_soundStarted = 1
 
 
 
@@ -9,6 +11,9 @@ eventNum = 1
 WhenBroadcastReceived(ScriptFunctions::ScriptFunctions)
 {
     Call //TODO("ScriptFunctions::ScriptFunctions");
+    _autoStopSound = False;
+    _soundStarted = False;
+    screenLock = False;
 }
 
 WhenBroadcastReceived(ScriptFunctions::setupExternalsTable)
@@ -88,41 +93,19 @@ WhenBroadcastReceived(sfAllocTimer)
     Call Not implemented yet("AllocTimer");
 }
 
-WhenBroadcastReceived(sfAnimText)
-{
-    Call Not implemented yet("AnimText");
-}
-
-WhenBroadcastReceived(sfClearMono)
-{
-    Call Not implemented yet("ClearMono");
-}
-
 WhenBroadcastReceived(sfClearScreen)
 {
-    Call //TODO (quietly)("a few bits and bobs should happen in here");
+    If (screenLock == True)
+    {
+        ReturnValue = 0;
+    }
+    If (_autoStopSound == True)
+    {
+        Event.BroadcastAndWait("stop sfx");
+        _autoStopSound = False;
+    }
     List.Add(Gfx.queue, Sensing.Of(command.clearScr, gfx));
     ReturnValue = 0;
-}
-
-WhenBroadcastReceived(sfClearText)
-{
-    Call Not implemented yet("ClearText");
-}
-
-WhenBroadcastReceived(sfDeleteChannel)
-{
-    Call Not implemented yet("DeleteChannel");
-}
-
-WhenBroadcastReceived(sfDrawAnimPic)
-{
-    Call Not implemented yet("DrawAnimPic");
-}
-
-WhenBroadcastReceived(sfDrawMenu)
-{
-    Call Not implemented yet("DrawMenu");
 }
 
 WhenBroadcastReceived(sfDrawPicture)
@@ -166,16 +149,6 @@ WhenBroadcastReceived(sfFreeTimer)
     Call Not implemented yet("FreeTimer");
 }
 
-WhenBroadcastReceived(sfGetAnimFrame)
-{
-    Call Not implemented yet("GetAnimFrame");
-}
-
-WhenBroadcastReceived(sfGetAnimFrameCount)
-{
-    Call Not implemented yet("GetAnimFrameCount");
-}
-
 WhenBroadcastReceived(sfGetCdStatus)
 {
     Call //TODO("GetCdStatus");
@@ -188,29 +161,9 @@ WhenBroadcastReceived(sfGetCdTime)
     ReturnValue = 32000;
 }
 
-WhenBroadcastReceived(sfGetChannelState)
-{
-    Call Not implemented yet("GetChannelState");
-}
-
-WhenBroadcastReceived(sfGetChannelType)
-{
-    Call Not implemented yet("GetChannelType");
-}
-
-WhenBroadcastReceived(sfGetGameDescription)
-{
-    Call Not implemented yet("GetGameDescription");
-}
-
 WhenBroadcastReceived(sfGetKey)
 {
     ReturnValue = Sensing.Of(_eventKey, made);
-}
-
-WhenBroadcastReceived(sfGetMenuCount)
-{
-    Call Not implemented yet("GetMenuCount");
 }
 
 WhenBroadcastReceived(sfGetMouseX)
@@ -228,31 +181,6 @@ WhenBroadcastReceived(sfGetMusicBeat)
     Call Not implemented yet("GetMusicBeat");
 }
 
-WhenBroadcastReceived(sfGetPictureHeight)
-{
-    Call Not implemented yet("GetPictureHeight");
-}
-
-WhenBroadcastReceived(sfGetPictureWidth)
-{
-    Call Not implemented yet("GetPictureWidth");
-}
-
-WhenBroadcastReceived(sfGetSoundEnergy)
-{
-    Call Not implemented yet("GetSoundEnergy");
-}
-
-WhenBroadcastReceived(sfGetSynthType)
-{
-    Call Not implemented yet("GetSynthType");
-}
-
-WhenBroadcastReceived(sfGetTextWidth)
-{
-    Call Not implemented yet("GetTextWidth");
-}
-
 WhenBroadcastReceived(sfGetTimer)
 {
     Call Not implemented yet("GetTimer");
@@ -260,7 +188,7 @@ WhenBroadcastReceived(sfGetTimer)
 
 WhenBroadcastReceived(sfHideMouseCursor)
 {
-    Call //TODO("HideMouseCursor");
+    Event.BroadcastAndWait("hide cursor");
     ReturnValue = 0;
 }
 
@@ -279,64 +207,14 @@ WhenBroadcastReceived(sfIsMusicPlaying)
     Call Not implemented yet("IsMusicPlaying");
 }
 
-WhenBroadcastReceived(sfIsSlowSystem)
-{
-    Call Not implemented yet("IsSlowSystem");
-}
-
-WhenBroadcastReceived(sfLoadAnim)
-{
-    Call Not implemented yet("LoadAnim");
-}
-
-WhenBroadcastReceived(sfLoadGame)
-{
-    Call Not implemented yet("LoadGame");
-}
-
 WhenBroadcastReceived(sfLoadMouseCursor)
 {
     Call Not implemented yet("LoadMouseCursor");
 }
 
-WhenBroadcastReceived(sfLoadMusic)
-{
-    Call Not implemented yet("LoadMusic");
-}
-
-WhenBroadcastReceived(sfLoadPicture)
-{
-    Call Not implemented yet("LoadPicture");
-}
-
 WhenBroadcastReceived(sfLoadResText)
 {
     Call Not implemented yet("LoadResText");
-}
-
-WhenBroadcastReceived(sfLoadSound)
-{
-    Call Not implemented yet("LoadSound");
-}
-
-WhenBroadcastReceived(sfPlaceAnim)
-{
-    Call Not implemented yet("PlaceAnim");
-}
-
-WhenBroadcastReceived(sfPlaceMenu)
-{
-    Call Not implemented yet("PlaceMenu");
-}
-
-WhenBroadcastReceived(sfPlaceSprite)
-{
-    Call Not implemented yet("PlaceSprite");
-}
-
-WhenBroadcastReceived(sfPlaceText)
-{
-    Call Not implemented yet("PlaceText");
 }
 
 WhenBroadcastReceived(sfPlayCd)
@@ -348,11 +226,6 @@ WhenBroadcastReceived(sfPlayCd)
 WhenBroadcastReceived(sfPlayCdSegment)
 {
     Call Not implemented yet("PlayCdSegment");
-}
-
-WhenBroadcastReceived(sfPlayMovie)
-{
-    Call Not implemented yet("PlayMovie");
 }
 
 WhenBroadcastReceived(sfPlayMusic)
@@ -367,16 +240,19 @@ WhenBroadcastReceived(sfPlayNote)
 
 WhenBroadcastReceived(sfPlaySound)
 {
+    Event.BroadcastAndWait("stopSound");
     If (argc == 1)
     {
         BroadcastParam1 = argv[1];
+        _autoStopSound = False;
     }
     Else
     {
         BroadcastParam1 = argv[2];
+        _autoStopSound = (argv[1] == 1);
     }
     Event.BroadcastAndWait("sfx play");
-    Call //TODO (quietly)("Various stop and autoStop stuff to add");
+    _soundStarted = True;
     ReturnValue = 0;
 }
 
@@ -387,7 +263,12 @@ WhenBroadcastReceived(sfPlayTele)
 
 WhenBroadcastReceived(sfPlayVoice)
 {
-    Call Not implemented yet("PlayVoice");
+    Event.BroadcastAndWait("stopSound");
+    BroadcastParam1 = argv[1];
+    _autoStopSound = True;
+    Event.BroadcastAndWait("sfx play");
+    _soundStarted = True;
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfPollEvent)
@@ -398,69 +279,14 @@ WhenBroadcastReceived(sfPollEvent)
     ReturnValue = eventNum;
 }
 
-WhenBroadcastReceived(sfPrintf)
-{
-    Call Not implemented yet("Printf");
-}
-
-WhenBroadcastReceived(sfReadMenu)
-{
-    Call Not implemented yet("ReadMenu");
-}
-
-WhenBroadcastReceived(sfReadText)
-{
-    Call Not implemented yet("ReadText");
-}
-
 WhenBroadcastReceived(sfResetTimer)
 {
     Call Not implemented yet("ResetTimer");
 }
 
-WhenBroadcastReceived(sfRestartEvents)
-{
-    Call Not implemented yet("RestartEvents");
-}
-
 WhenBroadcastReceived(sfRestoreGraf)
 {
     ReturnValue = 0;
-}
-
-WhenBroadcastReceived(sfSaveGame)
-{
-    Call Not implemented yet("SaveGame");
-}
-
-WhenBroadcastReceived(sfSetAnimFrame)
-{
-    Call Not implemented yet("SetAnimFrame");
-}
-
-WhenBroadcastReceived(sfSetChannelContent)
-{
-    Call Not implemented yet("SetChannelContent");
-}
-
-WhenBroadcastReceived(sfSetChannelLocation)
-{
-    Call Not implemented yet("SetChannelLocation");
-}
-
-WhenBroadcastReceived(sfSetChannelState)
-{
-    Call Not implemented yet("SetChannelState");
-}
-
-WhenBroadcastReceived(sfSetClipArea)
-{
-    Call Not implemented yet("SetClipArea");
-}
-
-WhenBroadcastReceived(sfSetExcludeArea)
-{
-    Call Not implemented yet("SetExcludeArea");
 }
 
 WhenBroadcastReceived(sfSetFont)
@@ -483,11 +309,6 @@ WhenBroadcastReceived(sfSetFontOutline)
     Call Not implemented yet("SetFontOutline");
 }
 
-WhenBroadcastReceived(sfSetMusicVolume)
-{
-    Call Not implemented yet("SetMusicVolume");
-}
-
 WhenBroadcastReceived(sfSetPaletteLock)
 {
     Call Not implemented yet("SetPaletteLock");
@@ -495,28 +316,8 @@ WhenBroadcastReceived(sfSetPaletteLock)
 
 WhenBroadcastReceived(sfSetScreenLock)
 {
-    Call //TODO("SetScreenLock");
+    screenLock = (Not ((argv[1] == 0)));
     ReturnValue = 0;
-}
-
-WhenBroadcastReceived(sfSetSoundRate)
-{
-    Call Not implemented yet("SetSoundRate");
-}
-
-WhenBroadcastReceived(sfSetSoundVolume)
-{
-    Call Not implemented yet("SetSoundVolume");
-}
-
-WhenBroadcastReceived(sfSetSpriteClip)
-{
-    Call Not implemented yet("SetSpriteClip");
-}
-
-WhenBroadcastReceived(sfSetSpriteExclude)
-{
-    Call Not implemented yet("SetSpriteExclude");
 }
 
 WhenBroadcastReceived(sfSetSpriteGround)
@@ -531,7 +332,7 @@ WhenBroadcastReceived(sfSetSpriteMask)
 
 WhenBroadcastReceived(sfSetTextPos)
 {
-    Call Not implemented yet("SetTextPos");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfSetTextRect)
@@ -551,31 +352,32 @@ WhenBroadcastReceived(sfSetTimer)
 
 WhenBroadcastReceived(sfSetVisualEffect)
 {
-    Call //TODO("This should do something funky with visual effects");
+    Call //TODO (quietly)("This should do something funky with visual effects");
     ReturnValue = 0;
-}
-
-WhenBroadcastReceived(sfShakeScreen)
-{
-    Call Not implemented yet("ShakeScreen");
 }
 
 WhenBroadcastReceived(sfShowMouseCursor)
 {
-    Call //TODO("ShowMouseCursor");
+    Event.BroadcastAndWait("show cursor");
     ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfShowPage)
 {
-    Call //TODO (quietly)("Should this set a flag to tell the system to update the graphics (rather than updating each frame if updates are in the queue)?");
     Event.BroadcastAndWait("process graphics queue");
     ReturnValue = 56;
 }
 
 WhenBroadcastReceived(sfSoundPlaying)
 {
-    Call Not implemented yet("SoundPlaying");
+    If (SoundsActiveCount > 0)
+    {
+        ReturnValue = 1;
+    }
+    Else
+    {
+        ReturnValue = 0;
+    }
 }
 
 WhenBroadcastReceived(sfStopCd)
@@ -596,7 +398,9 @@ WhenBroadcastReceived(sfStopNote)
 
 WhenBroadcastReceived(sfStopSound)
 {
-    Call Not implemented yet("stStopSound");
+    Event.BroadcastAndWait("stopSound");
+    _autoStopSound = False;
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfStopTele)
@@ -609,11 +413,6 @@ WhenBroadcastReceived(sfSystemCall)
     ReturnValue = 0;
 }
 
-WhenBroadcastReceived(sfSystemCall)
-{
-    Call Not implemented yet("SystemCall");
-}
-
 WhenBroadcastReceived(sfUpdateSprites)
 {
     Call Not implemented yet("UpdateSprites");
@@ -621,7 +420,8 @@ WhenBroadcastReceived(sfUpdateSprites)
 
 WhenBroadcastReceived(stopSound)
 {
-    Call Not implemented yet("stopSound");
+    Event.BroadcastAndWait("stop sfx");
+    _soundStarted = False;
 }
 
 

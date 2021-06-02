@@ -1,0 +1,52 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+offsetX = 4
+offsetY = 16
+visible = 1
+
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(hide cursor)
+{
+    visible = False;
+    Looks.Hide();
+}
+
+WhenBroadcastReceived(initialise cursor)
+{
+    offsetX = 4;
+    offsetY = 16;
+    visible = False;
+    Looks.SetSizeTo(300);
+}
+
+WhenBroadcastReceived(MadeEngine::handleEvents)
+{
+    If (visible == True)
+    {
+        Motion.GoToXY((Sensing.MouseX() + offsetX), (Sensing.MouseY() + offsetY));
+    }
+}
+
+WhenBroadcastReceived(show cursor)
+{
+    visible = True;
+    Looks.Show();
+}
+
+WhenBroadcastReceived(thumbnail)
+{
+    Looks.Hide();
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+cursor.svg
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

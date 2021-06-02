@@ -2,10 +2,13 @@
 
 WhenGreenFlagClicked()
 {
+    Debug? = True;
     Pen.Clear();
     Event.BroadcastAndWait("clear data");
     Event.BroadcastAndWait("initialise graphics queue");
+    Event.BroadcastAndWait("initialise sfx");
     Event.BroadcastAndWait("MadeEngine::MadeEngine");
+    Event.BroadcastAndWait("initialise cursor");
     Event.BroadcastAndWait("MadeEngine::run");
 }
 
@@ -14,6 +17,8 @@ WhenGreenFlagClicked()
 
 WhenBroadcastReceived(clear data)
 {
+    Debug? = False;
+    Log? = False;
     False = 0;
     True = 1;
     List.DeleteAll(_dat);

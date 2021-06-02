@@ -1,24 +1,24 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-class = 28
-count1 = 9
-count2 = 0
-dataIndex = 53402
-i = 20
+class = 32
+count1 = 10
+count2 = 6
+dataIndex = 98336
+i = 34
 objectCount = 4210
 objectsOffs = 1024
 objectsSize = 106004
 objSize = 27
-parentObjectIndex = 22
-property = 2172
-propertyIndex = 648
-propIndex = 53384
-propIndex1 = 53402
-propIndex2 = 53386
+parentObjectIndex = 32
+property = 0
+propertyIndex = 1088
+propIndex = 1068
+propIndex1 = 98336
+propIndex2 = 98330
 sourceS = 107028
 textOffs = 512
 textSize = 512
-value = 1366
+value = 1
 varObjectCount = 4210
 _gameStateSize = 96
 _mainCodeObjectIndex = 69
@@ -279,7 +279,10 @@ Define GameDatabase::setVar at index(string index) with value(string value) (war
 
 Define LOG(string message) (warp=false)
 {
-    List.Add(LOG, message);
+    If (Log? == True)
+    {
+        List.Add(LOG, message);
+    }
 }
 
 Define Not implemented yet(string comment) (warp=false)
