@@ -2,12 +2,69 @@
 
 WhenBroadcastReceived(ScriptFunctions::ScriptFunctions)
 {
-    Call Not implemented yet("ScriptFunctions::ScriptFunctions");
+    Call //TODO("ScriptFunctions::ScriptFunctions");
 }
 
 WhenBroadcastReceived(ScriptFunctions::setupExternalsTable)
 {
-    Call Not implemented yet("setupExternalsTable");
+    List.DeleteAll(ScriptFuncs::_externalFuncs);
+    List.Add(ScriptFuncs::_externalFuncs, "sfSystemCall");
+    List.Add(ScriptFuncs::_externalFuncs, "sfInitGraf");
+    List.Add(ScriptFuncs::_externalFuncs, "sfRestoreGraf");
+    List.Add(ScriptFuncs::_externalFuncs, "sfDrawPicture");
+    List.Add(ScriptFuncs::_externalFuncs, "sfClearScreen");
+    List.Add(ScriptFuncs::_externalFuncs, "sfShowPage");
+    List.Add(ScriptFuncs::_externalFuncs, "sfPollEvent");
+    List.Add(ScriptFuncs::_externalFuncs, "sfGetMouseX");
+    List.Add(ScriptFuncs::_externalFuncs, "sfGetMouseY");
+    List.Add(ScriptFuncs::_externalFuncs, "sfGetKey");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetVisualEffect");
+    List.Add(ScriptFuncs::_externalFuncs, "sfPlaySound");
+    List.Add(ScriptFuncs::_externalFuncs, "sfPlayMusic");
+    List.Add(ScriptFuncs::_externalFuncs, "sfStopMusic");
+    List.Add(ScriptFuncs::_externalFuncs, "sfIsMusicPlaying");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetTextPos");
+    List.Add(ScriptFuncs::_externalFuncs, "sfFlashScreen");
+    List.Add(ScriptFuncs::_externalFuncs, "sfPlayNote");
+    List.Add(ScriptFuncs::_externalFuncs, "sfStopNote");
+    List.Add(ScriptFuncs::_externalFuncs, "sfPlayTele");
+    List.Add(ScriptFuncs::_externalFuncs, "sfStopTele");
+    List.Add(ScriptFuncs::_externalFuncs, "sfHideMouseCursor");
+    List.Add(ScriptFuncs::_externalFuncs, "sfShowMouseCursor");
+    List.Add(ScriptFuncs::_externalFuncs, "sfGetMusicBeat");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetScreenLock");
+    List.Add(ScriptFuncs::_externalFuncs, "sfAddSprite");
+    List.Add(ScriptFuncs::_externalFuncs, "sfFreeAnim");
+    List.Add(ScriptFuncs::_externalFuncs, "sfDrawSprite");
+    List.Add(ScriptFuncs::_externalFuncs, "sfEraseSprites");
+    List.Add(ScriptFuncs::_externalFuncs, "sfUpdateSprites");
+    List.Add(ScriptFuncs::_externalFuncs, "sfGetTimer");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetTimer");
+    List.Add(ScriptFuncs::_externalFuncs, "sfResetTimer");
+    List.Add(ScriptFuncs::_externalFuncs, "sfAllocTimer");
+    List.Add(ScriptFuncs::_externalFuncs, "sfFreeTimer");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetPaletteLock");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetFont");
+    List.Add(ScriptFuncs::_externalFuncs, "sfDrawText");
+    List.Add(ScriptFuncs::_externalFuncs, "sfHomeText");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetTextRect");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetTextXY");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetFontDropShadow");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetFontColor");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetFontOutline");
+    List.Add(ScriptFuncs::_externalFuncs, "sfLoadMouseCursor");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetSpriteGround");
+    List.Add(ScriptFuncs::_externalFuncs, "sfLoadResText");
+    List.Add(ScriptFuncs::_externalFuncs, "sfAddScreenMask");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSetSpriteMask");
+    List.Add(ScriptFuncs::_externalFuncs, "sfSoundPlaying");
+    List.Add(ScriptFuncs::_externalFuncs, "sfStopSound");
+    List.Add(ScriptFuncs::_externalFuncs, "sfPlayVoice");
+    List.Add(ScriptFuncs::_externalFuncs, "sfPlayCd");
+    List.Add(ScriptFuncs::_externalFuncs, "sfStopCd");
+    List.Add(ScriptFuncs::_externalFuncs, "sfGetCdStatus");
+    List.Add(ScriptFuncs::_externalFuncs, "sfGetCdTime");
+    List.Add(ScriptFuncs::_externalFuncs, "sfPlayCdSegment");
 }
 
 WhenBroadcastReceived(sfAddScreenMask)
@@ -37,7 +94,9 @@ WhenBroadcastReceived(sfClearMono)
 
 WhenBroadcastReceived(sfClearScreen)
 {
-    Call Not implemented yet("ClearScreen");
+    Call //TODO("a few bits and bobs should happen in here");
+    Pen.Clear();
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfClearText)
@@ -187,7 +246,7 @@ WhenBroadcastReceived(sfGetTimer)
 
 WhenBroadcastReceived(sfHideMouseCursor)
 {
-    Call Not implemented yet("HideMouseCursor");
+    Call //TODO("HideMouseCursor");
 }
 
 WhenBroadcastReceived(sfHomeText)
@@ -197,7 +256,7 @@ WhenBroadcastReceived(sfHomeText)
 
 WhenBroadcastReceived(sfInitGraf)
 {
-    Call Not implemented yet("InitGraf");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfIsMusicPlaying)
@@ -337,7 +396,7 @@ WhenBroadcastReceived(sfRestartEvents)
 
 WhenBroadcastReceived(sfRestoreGraf)
 {
-    Call Not implemented yet("RestoreGraf");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfSaveGame)
@@ -472,7 +531,7 @@ WhenBroadcastReceived(sfShakeScreen)
 
 WhenBroadcastReceived(sfShowMouseCursor)
 {
-    Call Not implemented yet("ShowMouseCursor");
+    Call //TODO("ShowMouseCursor");
 }
 
 WhenBroadcastReceived(sfShowPage)
@@ -512,7 +571,7 @@ WhenBroadcastReceived(sfStopTele)
 
 WhenBroadcastReceived(sfSystemCall)
 {
-    Call Not implemented yet("SystemCall");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfSystemCall)
@@ -533,8 +592,15 @@ WhenBroadcastReceived(stopSound)
 
 //----- Custom blocks -------------------------------------------------------------------------------------------------
 
+Define //TODO(string comment) (warp=false)
+{
+    List.Add(DEBUG, function);
+    List.Show(DEBUG);
+}
+
 Define Not implemented yet(string function) (warp=false)
 {
+    List.DeleteAll(DEBUG);
     List.Add(DEBUG, function);
     List.Show(DEBUG);
     Stop(all);

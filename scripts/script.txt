@@ -1,24 +1,30 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-argc = 2
 argIndex = 0
-class = 28
-funcResult = 3181
-i = 79836
+class = 32766
+count1 = 4
+count2 = 0
+func = 3
+funcResult = 0
+i = 5
+index = 3
 kScriptStackLimit = 1001
 kScriptStackSize = 1000
-opcode = 42
-peek = 4211
-pop = 1
-pos = 986
-top = 3182
-value = 1
-variable = 1
-_codeBase = 428
-_codeIp = 451
-_localStackPos = 0
-_runningScriptObjectIndex = 0
-_stackPos = 1000
+objectIndex = 85
+opcode = 52
+peek = 10
+pop = 0
+pos = 964
+propertyId = 16
+size = 4
+top = 0
+value = 5
+variable = 10
+_codeBase = 797
+_codeIp = 936
+_localStackPos = 979
+_runningScriptObjectIndex = 27
+_stackPos = 964
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------
@@ -52,7 +58,7 @@ WhenBroadcastReceived(cmd_aset)
 
 WhenBroadcastReceived(cmd_band)
 {
-    Call Not implemented yet("band");
+    Call cmd_band;
 }
 
 WhenBroadcastReceived(cmd_bnot)
@@ -160,7 +166,22 @@ WhenBroadcastReceived(cmd_exit)
 
 WhenBroadcastReceived(cmd_extend)
 {
-    Call Not implemented yet("extend");
+    Call value = readByte;
+    func = value;
+    Call value = readByte;
+    argc = value;
+    Call pos = getStackPos;
+    List.DeleteAll(argv);
+    i = 0;
+    Repeat (argc)
+    {
+        Call peek = stack.peek((pos + i));
+        List.Add(argv, peek);
+        i += 1;
+    }
+    Event.BroadcastAndWait(ScriptFuncs::_externalFuncs[(func + 1)]);
+    Call stack.free(argc);
+    Call stack.setTop(ReturnValue);
 }
 
 WhenBroadcastReceived(cmd_false)
@@ -371,7 +392,56 @@ WhenBroadcastReceived(cmd_save)
 
 WhenBroadcastReceived(cmd_send)
 {
-    Call Not implemented yet("send");
+    Call LOG("");
+    Call pos = getStackPos;
+    Call LOG(Operator.Join("ENTER: stackPtr = ", Operator.Join(Operator.Join(pos, "; _localStackPos = "), _localStackPos)));
+    Call value = readByte;
+    argc = value;
+    Call stack.push(argc);
+    Call LOG(Operator.Join("argc = ", argc));
+    Call stack.push((_codeIp - _codeBase));
+    Call stack.push(_runningScriptObjectIndex);
+    Call stack.push((kScriptStackLimit - _localStackPos));
+    Call pos = getStackPos;
+    _localStackPos = pos;
+    Call peek = stack.peek(((_localStackPos + argc) + 2));
+    propertyId = peek;
+    Call peek = stack.peek(((_localStackPos + argc) + 4));
+    objectIndex = peek;
+    Call LOG(Operator.Join(Operator.Join(Operator.Join("objectIndex = ", objectIndex), "; propertyId = "), propertyId));
+    If (Not ((objectIndex == 0)))
+    {
+        Call class = ObjectV2::getClass for object index(objectIndex);
+        objectIndex = class;
+    }
+    Else
+    {
+        Call peek = stack.peek(((_localStackPos + argc) + 3));
+        objectIndex = peek;
+    }
+    Call LOG(Operator.Join("--> objectIndex = ", objectIndex));
+    If (Not ((objectIndex == 0)))
+    {
+        BroadcastParam1 = objectIndex;
+        BroadcastParam2 = propertyId;
+        Event.BroadcastAndWait("ReturnValue = GameDatabase::getObjectProperty(param1, param2)");
+        _runningScriptObjectIndex = ReturnValue;
+        If (Not ((_runningScriptObjectIndex == 0)))
+        {
+            _codeBase = (ObjectV2::objDataOffset[_runningScriptObjectIndex] + 4);
+            _codeIp = _codeBase;
+        }
+        Else
+        {
+            Call stack.push(0);
+            Event.BroadcastAndWait("cmd_return");
+        }
+    }
+    Else
+    {
+        Call stack.push(0);
+        Event.BroadcastAndWait("cmd_return");
+    }
 }
 
 WhenBroadcastReceived(cmd_set)
@@ -470,17 +540,43 @@ WhenBroadcastReceived(cmd_vectorp)
 
 WhenBroadcastReceived(cmd_vref)
 {
-    Call Not implemented yet("vref");
+    value = 0;
+    Call pop = stack.pop;
+    index = pop;
+    Call top =_stack.top;
+    objectIndex = top;
+    If (objectIndex > 0)
+    {
+        Call value = ObjectV2::getVectorItem(index) for object index(objectIndex);
+    }
+    Call stack.setTop(value);
 }
 
 WhenBroadcastReceived(cmd_vset)
 {
-    Call Not implemented yet("vset");
+    Call top =_stack.top;
+    value = top;
+    Call pop = stack.pop;
+    index = pop;
+    Call top =_stack.top;
+    objectIndex = top;
+    If (objectIndex > 0)
+    {
+        Call ObjectV2::setVectorItem(index)(value) for object index(objectIndex);
+    }
+    Call stack.setTop(value);
 }
 
 WhenBroadcastReceived(cmd_vsize)
 {
-    Call Not implemented yet("vsize");
+    Call top =_stack.top;
+    objectIndex = top;
+    size = 0;
+    If (objectIndex > 0)
+    {
+        Call size = ObjectV2::GetVectorSize for object index(objectIndex);
+    }
+    Call stack.setTop(size);
 }
 
 WhenBroadcastReceived(cmd_yorn)
@@ -570,7 +666,8 @@ WhenBroadcastReceived(ScriptInterpreter::ScriptInterpreter)
     Call addProc("cmd_ge")("");
     Call addProc("cmd_varx")("");
     Call addProc("cmd_setx")("");
-    Call //TODO("Initialise _functions");
+    Event.BroadcastAndWait("ScriptFunctions::ScriptFunctions");
+    Event.BroadcastAndWait("ScriptFunctions::setupExternalsTable");
     _localStackPos = 0;
     _runningScriptObjectIndex = 0;
 }
@@ -601,6 +698,21 @@ Define class = ObjectV2::getClass for object index(string index) (warp=false)
     class = (ObjectV2::_objData[i] + (ObjectV2::_objData[(i + 1)] * 256));
 }
 
+Define cmd_band (warp=true)
+{
+    Call pop = stack.pop;
+    Call top =_stack.top;
+    value = 0;
+    Repeat (16)
+    {
+        value += ((((pop % 2) == 1) And ((top % 2) == 1)) * 65536);
+        value = Operator.Round((value / 2));
+        pop = Operator.Round((pop / 2));
+        top = Operator.Round((top / 2));
+    }
+    Call stack.setTop(value);
+}
+
 Define cmd_bor (warp=true)
 {
     Call pop = stack.pop;
@@ -616,6 +728,25 @@ Define cmd_bor (warp=true)
     Call stack.setTop(value);
 }
 
+Define count1 = ObjectV2::getCount1 for object#(string index) (warp=false)
+{
+    i = ObjectV2::objDataOffset[index];
+    count1 = ObjectV2::_objData[(i + 2)];
+}
+
+Define count2 = ObjectV2::getCount2 for object#(string index) (warp=false)
+{
+    i = ObjectV2::objDataOffset[index];
+    count2 = ObjectV2::_objData[(i + 3)];
+}
+
+Define ERROR(string message) (warp=false)
+{
+    List.Add(DEBUG, message);
+    List.Show(DEBUG);
+    Stop(all);
+}
+
 Define GameDatabase::setVar at index(string index) with value(string value) (warp=false)
 {
     List.ReplaceItem(_gameState, ((index * 2) + 1), (value % 256));
@@ -629,9 +760,27 @@ Define LOG(string comment) (warp=false)
 
 Define Not implemented yet(string function) (warp=false)
 {
+    List.DeleteAll(DEBUG);
     List.Add(DEBUG, function);
     List.Show(DEBUG);
     Stop(all);
+}
+
+Define ObjectV2::setVectorItem(string vector.index)(string vector.value) for object index(string index) (warp=false)
+{
+    Call class = ObjectV2::getClass for object index(index);
+    If (class == 65535)
+    {
+        List.ReplaceItem(ObjectV2::_objData, ((ObjectV2::objDataOffset[index] + 4) + vector.index), vector.value);
+    }
+    Else
+    {
+        If (class < 65535)
+        {
+            List.ReplaceItem(ObjectV2::_objData, ((ObjectV2::objDataOffset[index] + 4) + (vector.index * 2)), (vector.value % 256));
+            List.ReplaceItem(ObjectV2::_objData, ((ObjectV2::objDataOffset[index] + 4) + ((vector.index * 2) + 1)), floor((vector.value / 256)));
+        }
+    }
 }
 
 Define peek = stack.peek(string index) (warp=false)
@@ -660,6 +809,28 @@ Define ScriptStack::ScriptStack (warp=true)
         List.Add(_stack, 0);
     }
     _stackPos = kScriptStackSize;
+}
+
+Define size = ObjectV2::GetVectorSize for object index(string index) (warp=false)
+{
+    Call class = ObjectV2::getClass for object index(index);
+    If ((class == 65535) Or (class == 65534))
+    {
+        size = ObjectV2::_objSize[index];
+    }
+    Else
+    {
+        If (class < 65534)
+        {
+            Call count1 = ObjectV2::getCount1 for object#(index);
+            Call count2 = ObjectV2::getCount2 for object#(index);
+            size = (count1 + count2);
+        }
+        Else
+        {
+            Call ERROR("Unknown object class");
+        }
+    }
 }
 
 Define stack.alloc(string count) (warp=false)
@@ -706,6 +877,26 @@ Define top =_stack.top (warp=false)
 Define value = GameDatabase::getVar at index(string index) (warp=false)
 {
     value = (_gameState[((index * 2) + 1)] + (_gameState[((index * 2) + 2)] * 256));
+}
+
+Define value = ObjectV2::getVectorItem(string vector.index) for object index(string index) (warp=false)
+{
+    Call class = ObjectV2::getClass for object index(index);
+    If (class == 65535)
+    {
+        value = ObjectV2::_objData[((ObjectV2::objDataOffset[index] + 4) + vector.index)];
+    }
+    Else
+    {
+        If (class < 65535)
+        {
+            value = (ObjectV2::_objData[((ObjectV2::objDataOffset[index] + 4) + (vector.index * 2))] + (ObjectV2::_objData[((ObjectV2::objDataOffset[index] + 4) + ((vector.index * 2) + 1))] * 256));
+        }
+        Else
+        {
+            Call ERROR("Unknown object class");
+        }
+    }
 }
 
 Define value = readByte (warp=false)

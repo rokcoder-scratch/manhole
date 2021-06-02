@@ -1,19 +1,23 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-BroadcastParam1 = 19
-BroadcastParam2 = 5
-BroadcastParam3 = 3181
+argc = 5
+BroadcastParam1 = 84
+BroadcastParam2 = 14
+BroadcastParam3 = 4190
 False = 0
-ReturnValue = 424
+ReturnValue = 85
 True = 1
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------
 
+argv = { }
 DEBUG = { }
 LOG = { }
 ObjectV2::objDataOffset = { }
 ObjectV2::_objData = { }
+ObjectV2::_objSize = { }
+ScriptFuncs::_externalFuncs = { }
 _dat = { }
 _gameState = { }
 
