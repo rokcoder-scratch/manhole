@@ -3,12 +3,12 @@
 command = 2
 command.clearScr = 1
 command.drawPic = 2
-costume = flex-153
-costumeNumber = 155
+costume = flex-788
+costumeNumber = 790
 flipX = 
 flipY = 
-i = 32
-time = 24.419
+i = 14
+time = 5.656
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------

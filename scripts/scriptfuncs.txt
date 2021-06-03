@@ -1,11 +1,11 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-deltaTime = 7392
+deltaTime = 1781
 eventNum = 0
 _autoStopSound = 0
-_cdTimeStart = 12.111
+_cdTimeStart = 5.856
 _musicBeatStart = 167.032
-_soundStarted = 1
+_soundStarted = 0
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------
@@ -506,24 +506,8 @@ Define //(string comment) (warp=false)
 {
 }
 
-Define //TODO(string comment) (warp=false)
-{
-    List.Add(DEBUG, comment);
-    List.Show(DEBUG);
-}
-
-Define //TODO (quietly)(string comment) (warp=false)
-{
-    List.Add(DEBUG, comment);
-    List.Show(DEBUG);
-}
-
 Define Not implemented yet(string function) (warp=false)
 {
-    List.DeleteAll(DEBUG);
-    List.Add(DEBUG, function);
-    List.Show(DEBUG);
-    Stop(all);
 }
 
 
