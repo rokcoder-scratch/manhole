@@ -1,18 +1,18 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
 argc = 0
-BroadcastParam1 = 69
-BroadcastParam2 = 21
-BroadcastParam3 = 4190
+BroadcastParam1 = 41
+BroadcastParam2 = 4
+BroadcastParam3 = 1
 Debug? = 0
 False = 0
 Graphics drawn? = 0
 Log? = 0
 MusicPlaying = 0
 OptionsSelected = 0
-ReturnValue = 2466
-screenLock = 0
-SoundsActiveCount = 0
+ReturnValue = 1306
+screenLock = 
+SoundsActiveCount = 1
 True = 1
 _eventNum = 0
 _visualEffectNum = 0
@@ -34,7 +34,8 @@ _gameState = { }
 
 //----- Costumes ------------------------------------------------------------------------------------------------------
 
-backdrop1.svg
+blank.svg
+wait.svg
 
 
 //----- Sounds --------------------------------------------------------------------------------------------------------

@@ -1,30 +1,30 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-argIndex = 3
+argIndex = 1
 class = 32766
-count1 = 4
+count1 = 20
 count2 = 0
-func = 6
+func = 5
 funcResult = 0
 i = 1
-index = 3
+index = 19
 kScriptStackLimit = 1001
 kScriptStackSize = 1000
-objectIndex = 1829
+objectIndex = 0
 opcode = 52
-peek = 1829
-pop = 1
-pos = 999
-propertyId = 19
-size = 4
+peek = 0
+pop = 2
+pos = 961
+propertyId = 20
+size = 20
 top = 0
 value = 0
-variable = 18
-_codeBase = 2470
-_codeIp = 2510
-_localStackPos = 1000
-_runningScriptObjectIndex = 69
-_stackPos = 999
+variable = 10
+_codeBase = 1310
+_codeIp = 1324
+_localStackPos = 962
+_runningScriptObjectIndex = 41
+_stackPos = 961
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------

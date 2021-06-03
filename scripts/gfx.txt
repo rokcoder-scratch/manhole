@@ -3,12 +3,12 @@
 command = 2
 command.clearScr = 1
 command.drawPic = 2
-costume = flex-810
-costumeNumber = 810
+costume = flex-153
+costumeNumber = 155
 flipX = 
 flipY = 
-i = 8
-time = 3.121
+i = 32
+time = 24.419
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------
@@ -1847,9 +1847,9 @@ Define process graphics queue (warp=true)
                 Looks.SwitchCostumeTo(scaler);
                 Looks.SetSizeTo(1000);
                 i += 1;
-                Motion.SetX((((Gfx.queue[i] + (costume dimensions[((costumeNumber * 2) - 1)] / 2)) - 160) * 1.5));
+                Motion.SetX((((Gfx.queue[i] + (costume dimensions[(((costumeNumber - 2) * 2) - 1)] / 2)) - 160) * 1.5));
                 i += 1;
-                Motion.SetY((((120 - Gfx.queue[i]) - (costume dimensions[(costumeNumber * 2)] / 2)) * 1.5));
+                Motion.SetY((((120 - Gfx.queue[i]) - (costume dimensions[((costumeNumber - 2) * 2)] / 2)) * 1.5));
                 i += 1;
                 flipX = (Gfx.queue[i] == -1);
                 i += 1;

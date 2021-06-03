@@ -3,6 +3,7 @@
 WhenGreenFlagClicked()
 {
     Pen.Clear();
+    Graphics drawn? = False;
     Event.BroadcastAndWait("clear data");
     Debug? = False;
     Log? = False;
@@ -11,12 +12,14 @@ WhenGreenFlagClicked()
     Event.BroadcastAndWait("initialise notes");
     Event.BroadcastAndWait("MadeEngine::MadeEngine");
     Event.BroadcastAndWait("initialise cursor");
-    Event.Broadcast("MadeEngine::run");
-    Wait Until (Graphics drawn? == True);
+    Looks.SwitchBackdropTo(wait);
     Repeat (10)
     {
         Looks.ChangeEffectBy(GHOST, 10);
     }
+    Event.Broadcast("MadeEngine::run");
+    Wait Until (Graphics drawn? == True);
+    Looks.SwitchBackdropTo(blank);
 }
 
 
@@ -46,6 +49,7 @@ WhenBroadcastReceived(thumbnail)
 {
     Pen.Clear();
     Event.BroadcastAndWait("clear data");
+    Looks.SwitchBackdropTo(blank);
 }
 
 

@@ -1,18 +1,10 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
 mouseDown = 
-_eventKey = 0
-_eventMouseX = 52.666666666667
+_eventKey = 27
+_eventMouseX = 34
 _eventMouseY = 0
 
-
-
-//----- Green flag events ---------------------------------------------------------------------------------------------
-
-WhenGreenFlagClicked()
-{
-    Looks.Show();
-}
 
 
 //----- Sprite clicked events -----------------------------------------------------------------------------------------
@@ -59,6 +51,7 @@ WhenBroadcastReceived(MadeEngine::MadeEngine)
     _eventMouseY = 0;
     _eventKey = 0;
     OptionsSelected = False;
+    Event.Broadcast("wait to show options");
     Call //TODO("Variables to initialise");
     Call //TODO("Various things to initialise");
     Event.BroadcastAndWait("GameDatabaseV2::GameDatabaseV2");
@@ -82,6 +75,12 @@ WhenBroadcastReceived(MadeEngine::run)
 WhenBroadcastReceived(thumbnail)
 {
     Looks.Hide();
+}
+
+WhenBroadcastReceived(wait to show options)
+{
+    Wait Until (Graphics drawn? == True);
+    Looks.Show();
 }
 
 
