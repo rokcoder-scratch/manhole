@@ -1,7 +1,7 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
 clone? = 0
-soundNumber = 84
+soundNumber = 63
 
 
 
@@ -43,6 +43,7 @@ Control.WhenIStartAsClone()
     SoundsActiveCount += 1;
     Sound.PlayUntilDone(Operator.Join("sfx-", soundNumber));
     SoundsActiveCount += -1;
+    Control.DeleteThisClone();
 }
 
 

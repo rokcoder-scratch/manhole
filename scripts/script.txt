@@ -2,26 +2,26 @@
 
 argIndex = 3
 class = 32766
-count1 = 20
+count1 = 4
 count2 = 0
 func = 6
 funcResult = 0
 i = 1
-index = 38
+index = 3
 kScriptStackLimit = 1001
 kScriptStackSize = 1000
-objectIndex = 2985
-opcode = 
-peek = 2985
+objectIndex = 1829
+opcode = 52
+peek = 1829
 pop = 1
 pos = 999
 propertyId = 19
-size = 20
+size = 4
 top = 0
-value = 
+value = 0
 variable = 18
 _codeBase = 2470
-_codeIp = 611180
+_codeIp = 2510
 _localStackPos = 1000
 _runningScriptObjectIndex = 69
 _stackPos = 999
@@ -358,12 +358,13 @@ WhenBroadcastReceived(cmd_push)
 
 WhenBroadcastReceived(cmd_rand)
 {
-    Call Not implemented yet("rand");
+    Call top =_stack.top;
+    Call stack.setTop(Operator.Random(0 / (top - 1)));
 }
 
 WhenBroadcastReceived(cmd_randomize)
 {
-    Call Not implemented yet("randomize");
+    Call stack.setTop(0);
 }
 
 WhenBroadcastReceived(cmd_restart)
@@ -380,7 +381,8 @@ WhenBroadcastReceived(cmd_return)
 {
     If (_localStackPos == kScriptStackSize)
     {
-        Call Not implemented yet("cmd_return -> quit");
+        Event.BroadcastAndWait("thumbnail");
+        Stop(all);
     }
     Call top =_stack.top;
     funcResult = top;

@@ -9,5 +9,6 @@
 "sfx"
 "cursor"
 "music"
+"notes"
 "border"
 "todo"

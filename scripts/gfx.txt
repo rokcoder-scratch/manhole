@@ -3,12 +3,12 @@
 command = 2
 command.clearScr = 1
 command.drawPic = 2
-costume = flex-497
-costumeNumber = 497
+costume = flex-810
+costumeNumber = 810
 flipX = 
 flipY = 
-i = 32
-time = 282.135
+i = 8
+time = 3.121
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------
@@ -1732,16 +1732,62 @@ costume dimensions = {
     92
     
 }
+visualEffectPauseLength = { }
 
 
 //----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(flash)
+{
+    Motion.GoToXY(0, 0);
+    Costume.GoToFrontBack(back);
+    Looks.SwitchCostumeTo(flash);
+    Repeat (BroadcastParam1)
+    {
+        Looks.Show();
+        time = Sensing.Timer();
+        Repeat Until (Sensing.Timer() > (time + 0.02))
+        {
+            Event.BroadcastAndWait("MadeEngine::handleEvents");
+        }
+        Looks.Hide();
+        time = Sensing.Timer();
+        Repeat Until (Sensing.Timer() > (time + 0.02))
+        {
+            Event.BroadcastAndWait("MadeEngine::handleEvents");
+        }
+    }
+}
 
 WhenBroadcastReceived(initialise graphics queue)
 {
     command.clearScr = 1;
     command.drawPic = 2;
+    _visualEffectNum = 0;
     Looks.SetSizeTo(150);
     Motion.SetRotationStyle(left-right);
+    List.DeleteAll(visualEffectPauseLength);
+    List.Add(visualEffectPauseLength, 100);
+    List.Add(visualEffectPauseLength, 1000);
+    List.Add(visualEffectPauseLength, 1000);
+    List.Add(visualEffectPauseLength, 500);
+    List.Add(visualEffectPauseLength, 500);
+    List.Add(visualEffectPauseLength, 250);
+    List.Add(visualEffectPauseLength, 500);
+    List.Add(visualEffectPauseLength, 500);
+    List.Add(visualEffectPauseLength, 1000);
+    List.Add(visualEffectPauseLength, 200);
+    List.Add(visualEffectPauseLength, 1000);
+    List.Add(visualEffectPauseLength, 1000);
+    List.Add(visualEffectPauseLength, 800);
+    List.Add(visualEffectPauseLength, 800);
+    List.Add(visualEffectPauseLength, 700);
+    List.Add(visualEffectPauseLength, 700);
+    List.Add(visualEffectPauseLength, 700);
+    List.Add(visualEffectPauseLength, 2500);
+    List.Add(visualEffectPauseLength, 1000);
+    List.Add(visualEffectPauseLength, 1250);
+    List.Add(visualEffectPauseLength, 1250);
 }
 
 WhenBroadcastReceived(process graphics queue)
@@ -1750,12 +1796,25 @@ WhenBroadcastReceived(process graphics queue)
     {
         Stop(this script);
     }
+    Graphics drawn? = True;
     Call process graphics queue;
     time = Sensing.Timer();
-    Repeat Until (Sensing.Timer() > (time + 0.1))
+    Repeat Until (Sensing.Timer() > (time + (visualEffectPauseLength[(_visualEffectNum + 1)] / 1000)))
     {
         Event.BroadcastAndWait("MadeEngine::handleEvents");
     }
+    _visualEffectNum = 0;
+}
+
+WhenBroadcastReceived(thumbnail)
+{
+    List.DeleteAll(visualEffectPauseLength);
+    Graphics drawn? = False;
+}
+
+WhenBroadcastReceived(thumbnail)
+{
+    Looks.Hide();
 }
 
 
@@ -1790,7 +1849,7 @@ Define process graphics queue (warp=true)
                 i += 1;
                 Motion.SetX((((Gfx.queue[i] + (costume dimensions[((costumeNumber * 2) - 1)] / 2)) - 160) * 1.5));
                 i += 1;
-                Motion.SetY((((100 - Gfx.queue[i]) - (costume dimensions[(costumeNumber * 2)] / 2)) * 1.5));
+                Motion.SetY((((120 - Gfx.queue[i]) - (costume dimensions[(costumeNumber * 2)] / 2)) * 1.5));
                 i += 1;
                 flipX = (Gfx.queue[i] == -1);
                 i += 1;
@@ -1814,15 +1873,9 @@ Define process graphics queue (warp=true)
 }
 
 
-//----- Orphaned blocks -----------------------------------------------------------------------------------------------
-
-flex-858
-
-scaler
-
-
 //----- Costumes ------------------------------------------------------------------------------------------------------
 
+flash.svg
 flex-1.png
 flex-2.png
 flex-3.png

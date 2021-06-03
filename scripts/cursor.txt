@@ -1,7 +1,7 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-offsetX = 4
-offsetY = 16
+offsetX = 0
+offsetY = 0
 visible = 1
 
 
@@ -16,8 +16,8 @@ WhenBroadcastReceived(hide cursor)
 
 WhenBroadcastReceived(initialise cursor)
 {
-    offsetX = 4;
-    offsetY = 16;
+    offsetX = 0;
+    offsetY = 0;
     visible = False;
     Looks.SetSizeTo(300);
 }

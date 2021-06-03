@@ -2,9 +2,25 @@
 
 mouseDown = 
 _eventKey = 0
-_eventMouseX = 2.6666666666667
-_eventMouseY = 106
+_eventMouseX = 52.666666666667
+_eventMouseY = 0
 
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Looks.Show();
+}
+
+
+//----- Sprite clicked events -----------------------------------------------------------------------------------------
+
+WhenThisSpriteClicked()
+{
+    OptionsSelected = True;
+}
 
 
 //----- Broadcast received events -------------------------------------------------------------------------------------
@@ -12,7 +28,7 @@ _eventMouseY = 106
 WhenBroadcastReceived(MadeEngine::handleEvents)
 {
     _eventMouseX = (((Sensing.MouseX() + Sensing.Of(offsetX, cursor)) + 240) / 1.5);
-    _eventMouseY = ((150 - (Sensing.MouseY() + Sensing.Of(offsetY, cursor))) / 1.5);
+    _eventMouseY = ((180 - (Sensing.MouseY() + Sensing.Of(offsetY, cursor))) / 1.5);
     If (Not ((mouseDown == Sensing.MouseDown())))
     {
         mouseDown = Sensing.MouseDown();
@@ -27,6 +43,12 @@ WhenBroadcastReceived(MadeEngine::handleEvents)
     }
     Call //TODO("Right mouse button handling");
     Call //TODO("Handle key presses");
+    If (OptionsSelected == True)
+    {
+        _eventNum = 5;
+        _eventKey = 27;
+        OptionsSelected = False;
+    }
 }
 
 WhenBroadcastReceived(MadeEngine::MadeEngine)
@@ -36,6 +58,7 @@ WhenBroadcastReceived(MadeEngine::MadeEngine)
     _eventMouseX = 0;
     _eventMouseY = 0;
     _eventKey = 0;
+    OptionsSelected = False;
     Call //TODO("Variables to initialise");
     Call //TODO("Various things to initialise");
     Event.BroadcastAndWait("GameDatabaseV2::GameDatabaseV2");
@@ -54,6 +77,11 @@ WhenBroadcastReceived(MadeEngine::run)
     Call //TODO("More to implement");
     BroadcastParam1 = Sensing.Of(_mainCodeObjectIndex, database);
     Event.BroadcastAndWait("ScriptInterpreter::runScript");
+}
+
+WhenBroadcastReceived(thumbnail)
+{
+    Looks.Hide();
 }
 
 
@@ -115,7 +143,7 @@ Define syncSoundSettings (warp=true)
 
 //----- Costumes ------------------------------------------------------------------------------------------------------
 
-costume1.svg
+options.svg
 
 
 //----- Sounds --------------------------------------------------------------------------------------------------------

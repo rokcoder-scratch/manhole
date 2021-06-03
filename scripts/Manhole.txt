@@ -4,13 +4,19 @@ WhenGreenFlagClicked()
 {
     Pen.Clear();
     Event.BroadcastAndWait("clear data");
-    Debug? = True;
+    Debug? = False;
     Log? = False;
     Event.BroadcastAndWait("initialise graphics queue");
     Event.BroadcastAndWait("initialise sfx");
+    Event.BroadcastAndWait("initialise notes");
     Event.BroadcastAndWait("MadeEngine::MadeEngine");
     Event.BroadcastAndWait("initialise cursor");
-    Event.BroadcastAndWait("MadeEngine::run");
+    Event.Broadcast("MadeEngine::run");
+    Wait Until (Graphics drawn? == True);
+    Repeat (10)
+    {
+        Looks.ChangeEffectBy(GHOST, 10);
+    }
 }
 
 
@@ -50,7 +56,7 @@ Event.BroadcastAndWait("thumbnail")
 
 //----- Costumes ------------------------------------------------------------------------------------------------------
 
-costume1.svg
+manhole.png
 
 
 //----- Sounds --------------------------------------------------------------------------------------------------------

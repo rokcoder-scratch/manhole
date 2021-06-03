@@ -3,16 +3,19 @@
 argc = 0
 BroadcastParam1 = 69
 BroadcastParam2 = 21
-BroadcastParam3 = 726
+BroadcastParam3 = 4190
 Debug? = 0
 False = 0
+Graphics drawn? = 0
 Log? = 0
 MusicPlaying = 0
-ReturnValue = 0
-screenLock = 
+OptionsSelected = 0
+ReturnValue = 2466
+screenLock = 0
 SoundsActiveCount = 0
 True = 1
 _eventNum = 0
+_visualEffectNum = 0
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------

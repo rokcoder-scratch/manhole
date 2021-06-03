@@ -1,21 +1,58 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-deltaTime = 25707
+deltaTime = 9868
 eventNum = 0
 _autoStopSound = 0
-_cdTimeStart = 277.221
-_soundStarted = 1
+_cdTimeStart = 37.15
+_musicBeatStart = 167.032
+_soundStarted = 0
 
+
+//----- Lists ---------------------------------------------------------------------------------------------------------
+
+phoneFreq1 = { }
+phoneFreq2 = { }
 
 
 //----- Broadcast received events -------------------------------------------------------------------------------------
 
+WhenBroadcastReceived(clear data)
+{
+    List.DeleteAll(phoneFreq1);
+    List.DeleteAll(phoneFreq2);
+}
+
 WhenBroadcastReceived(ScriptFunctions::ScriptFunctions)
 {
-    Call //TODO("ScriptFunctions::ScriptFunctions");
     _autoStopSound = False;
     _soundStarted = False;
     screenLock = False;
+    List.DeleteAll(phoneFreq1);
+    List.DeleteAll(phoneFreq2);
+    List.Add(phoneFreq1, 88);
+    List.Add(phoneFreq1, 86);
+    List.Add(phoneFreq1, 88);
+    List.Add(phoneFreq1, 90);
+    List.Add(phoneFreq1, 86);
+    List.Add(phoneFreq1, 88);
+    List.Add(phoneFreq1, 90);
+    List.Add(phoneFreq1, 86);
+    List.Add(phoneFreq1, 88);
+    List.Add(phoneFreq1, 90);
+    List.Add(phoneFreq1, 86);
+    List.Add(phoneFreq1, 90);
+    List.Add(phoneFreq2, 82);
+    List.Add(phoneFreq2, 77);
+    List.Add(phoneFreq2, 77);
+    List.Add(phoneFreq2, 77);
+    List.Add(phoneFreq2, 79);
+    List.Add(phoneFreq2, 79);
+    List.Add(phoneFreq2, 79);
+    List.Add(phoneFreq2, 80);
+    List.Add(phoneFreq2, 80);
+    List.Add(phoneFreq2, 80);
+    List.Add(phoneFreq2, 82);
+    List.Add(phoneFreq2, 82);
 }
 
 WhenBroadcastReceived(ScriptFunctions::setupExternalsTable)
@@ -138,7 +175,9 @@ WhenBroadcastReceived(sfEraseSprites)
 
 WhenBroadcastReceived(sfFlashScreen)
 {
-    Call Not implemented yet("FlashScreen");
+    BroadcastParam1 = argv[1];
+    Event.BroadcastAndWait("flash");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfFreeAnim)
@@ -193,7 +232,7 @@ WhenBroadcastReceived(sfGetMouseY)
 
 WhenBroadcastReceived(sfGetMusicBeat)
 {
-    Call Not implemented yet("GetMusicBeat");
+    ReturnValue = (((Sensing.Timer() - _musicBeatStart) * 1000) / 360);
 }
 
 WhenBroadcastReceived(sfGetTimer)
@@ -219,7 +258,7 @@ WhenBroadcastReceived(sfInitGraf)
 
 WhenBroadcastReceived(sfIsMusicPlaying)
 {
-    Call Not implemented yet("IsMusicPlaying");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfLoadMouseCursor)
@@ -242,17 +281,22 @@ WhenBroadcastReceived(sfPlayCd)
 
 WhenBroadcastReceived(sfPlayCdSegment)
 {
-    Call Not implemented yet("PlayCdSegment");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfPlayMusic)
 {
-    Call Not implemented yet("PlayMusic");
+    Call //("This should play MIDI music but there's only one MIDI file in the resource of The Manhole and it's empty!");
+    _musicBeatStart = Sensing.Timer();
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfPlayNote)
 {
-    Call Not implemented yet("PlayNote");
+    BroadcastParam2 = 1;
+    BroadcastParam1 = argv[1];
+    Event.BroadcastAndWait("play note");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfPlaySound)
@@ -275,7 +319,12 @@ WhenBroadcastReceived(sfPlaySound)
 
 WhenBroadcastReceived(sfPlayTele)
 {
-    Call Not implemented yet("PlayTele");
+    BroadcastParam2 = 6;
+    BroadcastParam1 = (phoneFreq1[(argv[1] + 1)] - 12);
+    Event.BroadcastAndWait("play note");
+    BroadcastParam1 = (phoneFreq2[(argv[1] + 1)] - 12);
+    Event.BroadcastAndWait("play note");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfPlayVoice)
@@ -369,7 +418,7 @@ WhenBroadcastReceived(sfSetTimer)
 
 WhenBroadcastReceived(sfSetVisualEffect)
 {
-    Call //TODO (quietly)("This should do something funky with visual effects");
+    _visualEffectNum = argv[1];
     ReturnValue = 0;
 }
 
@@ -412,12 +461,13 @@ WhenBroadcastReceived(sfStopCd)
 
 WhenBroadcastReceived(sfStopMusic)
 {
-    Call Not implemented yet("StopMusic");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfStopNote)
 {
-    Call Not implemented yet("StopNote");
+    Event.BroadcastAndWait("stop note");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfStopSound)
@@ -429,7 +479,8 @@ WhenBroadcastReceived(sfStopSound)
 
 WhenBroadcastReceived(sfStopTele)
 {
-    Call Not implemented yet("StopTele");
+    Event.BroadcastAndWait("stop note");
+    ReturnValue = 0;
 }
 
 WhenBroadcastReceived(sfSystemCall)
@@ -451,6 +502,10 @@ WhenBroadcastReceived(stopSound)
 
 //----- Custom blocks -------------------------------------------------------------------------------------------------
 
+Define //(string comment) (warp=false)
+{
+}
+
 Define //TODO(string comment) (warp=false)
 {
     List.Add(DEBUG, comment);
@@ -459,6 +514,8 @@ Define //TODO(string comment) (warp=false)
 
 Define //TODO (quietly)(string comment) (warp=false)
 {
+    List.Add(DEBUG, comment);
+    List.Show(DEBUG);
 }
 
 Define Not implemented yet(string function) (warp=false)
@@ -468,15 +525,6 @@ Define Not implemented yet(string function) (warp=false)
     List.Show(DEBUG);
     Stop(all);
 }
-
-
-//----- Orphaned blocks -----------------------------------------------------------------------------------------------
-
-Call //TODO("")
-
-Call Not implemented yet("StopCd")
-
-Call Not implemented yet("GetCdStatus")
 
 
 //----- Costumes ------------------------------------------------------------------------------------------------------
