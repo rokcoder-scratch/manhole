@@ -273,6 +273,7 @@ WhenBroadcastReceived(sfLoadResText)
 
 WhenBroadcastReceived(sfPlayCd)
 {
+    Event.BroadcastAndWait("stop music");
     BroadcastParam1 = argv[1];
     Event.BroadcastAndWait("music play");
     _cdTimeStart = Sensing.Timer();
