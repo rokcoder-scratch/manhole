@@ -1,18 +1,20 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
 argc = 0
-BroadcastParam1 = 41
-BroadcastParam2 = 4
-BroadcastParam3 = 1
+BroadcastParam1 = 69
+BroadcastParam2 = 19
+BroadcastParam3 = 4190
+Countdown = -15717
 Debug? = 0
 False = 0
 Graphics drawn? = 0
 Log? = 0
-MusicPlaying = 0
+MusicPlaying = 1
 OptionsSelected = 0
-ReturnValue = 1306
+ProcessCounter = 92736
+ReturnValue = 2466
 screenLock = 
-SoundsActiveCount = 1
+SoundsActiveCount = 0
 True = 1
 _eventNum = 0
 _visualEffectNum = 0

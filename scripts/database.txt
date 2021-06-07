@@ -1,24 +1,24 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-class = 21
-count1 = 3
+class = 32
+count1 = 7
 count2 = 1
-dataIndex = 44970
-i = 12
+dataIndex = 44196
+i = 18
 objectCount = 4210
 objectsOffs = 1024
 objectsSize = 106004
 objSize = 27
 parentObjectIndex = 21
-property = 0
-propertyIndex = 618
-propIndex = 612
-propIndex1 = 44970
-propIndex2 = 44968
+property = 1841
+propertyIndex = 620
+propIndex = 44182
+propIndex1 = 44196
+propIndex2 = 44186
 sourceS = 107028
 textOffs = 512
 textSize = 512
-value = 1
+value = 4190
 varObjectCount = 4210
 _gameStateSize = 96
 _mainCodeObjectIndex = 69
@@ -134,12 +134,6 @@ Define //(string comment) (warp=false)
 {
 }
 
-Define //TODO(string comment) (warp=false)
-{
-    List.Add(DEBUG, comment);
-    List.Show(DEBUG);
-}
-
 Define buffer = SeekableReadStream::read(string bytes) bytes (warp=true)
 {
     List.DeleteAll(buffer);
@@ -245,7 +239,6 @@ Define dataIndex = GameDatabaseV2::findObjectProperty for objectIndex(string obj
         parentObjectIndex = class;
     }
     dataIndex = 0;
-    Call LOG(Operator.Join(Operator.Join(Operator.Join(Operator.Join("findObjectProperty(", objectIndex), ", "), propertyId), ") Property not found"));
 }
 
 Define ERROR(string message) (warp=false)
@@ -271,9 +264,6 @@ Define LOG(string message) (warp=false)
 
 Define Not implemented yet(string comment) (warp=false)
 {
-    List.Add(DEBUG, comment);
-    List.Show(DEBUG);
-    Stop(all);
 }
 
 Define ObjectV2::ObjectV2 for object index(string index) (warp=true)

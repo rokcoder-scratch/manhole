@@ -1,10 +1,7 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-clone? = 0
-duration = 0
+clone? = 1
 numLoops = 1
-onlyEmulate = 0
-startFrame = 0
 track = Track10
 
 
@@ -50,12 +47,12 @@ WhenBroadcastReceived(stop music)
 Control.WhenIStartAsClone()
 {
     clone? = True;
-    MusicPlaying += True;
+    MusicPlaying = True;
     Repeat (numLoops)
     {
         Sound.PlayUntilDone(track);
     }
-    MusicPlaying += False;
+    MusicPlaying = False;
     Control.DeleteThisClone();
 }
 

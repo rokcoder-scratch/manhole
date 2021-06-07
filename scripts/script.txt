@@ -1,30 +1,30 @@
 //----- Variables -----------------------------------------------------------------------------------------------------
 
-argIndex = 1
+argIndex = 0
 class = 32766
 count1 = 20
 count2 = 0
-func = 5
+func = 6
 funcResult = 0
 i = 1
 index = 19
 kScriptStackLimit = 1001
 kScriptStackSize = 1000
-objectIndex = 0
+objectIndex = 1840
 opcode = 52
 peek = 0
-pop = 2
-pos = 961
-propertyId = 20
+pop = 1
+pos = 999
+propertyId = 19
 size = 20
 top = 0
 value = 0
-variable = 10
-_codeBase = 1310
-_codeIp = 1324
-_localStackPos = 962
-_runningScriptObjectIndex = 41
-_stackPos = 961
+variable = 18
+_codeBase = 2470
+_codeIp = 2510
+_localStackPos = 1000
+_runningScriptObjectIndex = 69
+_stackPos = 999
 
 
 //----- Lists ---------------------------------------------------------------------------------------------------------
@@ -54,7 +54,6 @@ WhenBroadcastReceived(cmd_arg)
     argIndex = value;
     Call peek = stack.peek(((_localStackPos + 4) + argIndex));
     Call stack.setTop(peek);
-    Call LOG(Operator.Join("argIndex = ", Operator.Join(Operator.Join(value, "; value = "), peek)));
 }
 
 WhenBroadcastReceived(cmd_aset)
@@ -108,9 +107,6 @@ WhenBroadcastReceived(cmd_branchTrue)
 
 WhenBroadcastReceived(cmd_call)
 {
-    Call LOG("");
-    Call pos = getStackPos;
-    Call LOG(Operator.Join("ENTER: stackPtr = ", Operator.Join(Operator.Join(pos, "; _localStackPos = "), _localStackPos)));
     Call value = readByte;
     argc = value;
     Call stack.push(argc);
@@ -121,7 +117,6 @@ WhenBroadcastReceived(cmd_call)
     _localStackPos = pos;
     Call peek = stack.peek(((_localStackPos + argc) + 4));
     _runningScriptObjectIndex = peek;
-    Call LOG(Operator.Join("argc = ", Operator.Join(Operator.Join(argc, "; _runningScriptObjectIndex = "), _runningScriptObjectIndex)));
     BroadcastParam1 = _runningScriptObjectIndex;
     Event.BroadcastAndWait("RetunValue = GameDatabase::getObject(param1)");
     _codeBase = (ReturnValue + 4);
@@ -188,16 +183,12 @@ WhenBroadcastReceived(cmd_extend)
         List.Add(argv, peek);
         i += 1;
     }
-    Call LOG(Operator.Join(Operator.Join(Operator.Join(Operator.Join(Operator.Join("func = ", func), " ("), ScriptFuncs::_externalFuncs[(func + 1)]), "); argc = "), argc));
     i = 1;
     Repeat (argc)
     {
-        Call LOG(Operator.Join(Operator.Join(Operator.Join("argv[", (i - 1)), "] = "), argv[i]));
         i += 1;
     }
-    Call LOG(ScriptFuncs::_externalFuncs[(func + 1)]);
     Event.BroadcastAndWait(ScriptFuncs::_externalFuncs[(func + 1)]);
-    Call LOG(Operator.Join("result = ", ReturnValue));
     Call stack.free(argc);
     Call stack.setTop(ReturnValue);
 }
@@ -233,7 +224,6 @@ WhenBroadcastReceived(cmd_getObjectProperty)
     BroadcastParam2 = pop;
     Event.BroadcastAndWait("ReturnValue = GameDatabase::getObjectProperty(param1, param2)");
     Call stack.setTop(ReturnValue);
-    Call LOG(Operator.Join("value = ", ReturnValue));
 }
 
 WhenBroadcastReceived(cmd_gt)
@@ -268,7 +258,6 @@ WhenBroadcastReceived(cmd_loadConstant)
 {
     Call value = readInt16;
     Call stack.setTop(value);
-    Call LOG(Operator.Join("value = ", value));
 }
 
 WhenBroadcastReceived(cmd_loadVariable)
@@ -277,7 +266,6 @@ WhenBroadcastReceived(cmd_loadVariable)
     variable = value;
     Call value = GameDatabase::getVar at index(variable);
     Call stack.setTop(value);
-    Call LOG(Operator.Join(Operator.Join("variable = ", variable), Operator.Join("; value = ", value)));
 }
 
 WhenBroadcastReceived(cmd_lt)
@@ -401,8 +389,6 @@ WhenBroadcastReceived(cmd_return)
     Call stack.free(argc);
     Call stack.setTop(funcResult);
     Call pos = getStackPos;
-    Call LOG(Operator.Join("LEAVE: stackPtr = ", Operator.Join(Operator.Join(pos, "; _localStackPos = "), _localStackPos)));
-    Call LOG("");
 }
 
 WhenBroadcastReceived(cmd_save)
@@ -412,13 +398,9 @@ WhenBroadcastReceived(cmd_save)
 
 WhenBroadcastReceived(cmd_send)
 {
-    Call LOG("");
-    Call pos = getStackPos;
-    Call LOG(Operator.Join("ENTER: stackPtr = ", Operator.Join(Operator.Join(pos, "; _localStackPos = "), _localStackPos)));
     Call value = readByte;
     argc = value;
     Call stack.push(argc);
-    Call LOG(Operator.Join("argc = ", argc));
     Call stack.push((_codeIp - _codeBase));
     Call stack.push(_runningScriptObjectIndex);
     Call stack.push((kScriptStackLimit - _localStackPos));
@@ -428,7 +410,6 @@ WhenBroadcastReceived(cmd_send)
     propertyId = peek;
     Call peek = stack.peek(((_localStackPos + argc) + 4));
     objectIndex = peek;
-    Call LOG(Operator.Join(Operator.Join(Operator.Join("objectIndex = ", objectIndex), "; propertyId = "), propertyId));
     If (Not ((objectIndex == 0)))
     {
         Call class = ObjectV2::getClass for object index(objectIndex);
@@ -439,7 +420,6 @@ WhenBroadcastReceived(cmd_send)
         Call peek = stack.peek(((_localStackPos + argc) + 3));
         objectIndex = peek;
     }
-    Call LOG(Operator.Join("--> objectIndex = ", objectIndex));
     If (Not ((objectIndex == 0)))
     {
         BroadcastParam1 = objectIndex;
@@ -470,7 +450,6 @@ WhenBroadcastReceived(cmd_set)
     variable = value;
     Call top =_stack.top;
     Call GameDatabase::setVar at index(variable) with value(top);
-    Call LOG(Operator.Join(Operator.Join("var(", variable), Operator.Join(") = ", top)));
 }
 
 WhenBroadcastReceived(cmd_setObjectProperty)
@@ -527,7 +506,6 @@ WhenBroadcastReceived(cmd_tmp)
     Call value = readByte;
     Call peek = stack.peek(((_localStackPos - value) - 1));
     Call stack.setTop(peek);
-    Call LOG(Operator.Join("tempIndex = ", Operator.Join(Operator.Join(value, "; value = "), peek)));
 }
 
 WhenBroadcastReceived(cmd_true)
@@ -540,14 +518,12 @@ WhenBroadcastReceived(cmd_tset)
     Call value = readByte;
     Call top =_stack.top;
     Call stack.poke(((_localStackPos - value) - 1))(top);
-    Call LOG(Operator.Join("tempIndex = ", Operator.Join(Operator.Join(value, "; value = "), top)));
 }
 
 WhenBroadcastReceived(cmd_tspace)
 {
     Call value = readByte;
     Call stack.alloc(value);
-    Call LOG(Operator.Join("tempCount = ", value));
 }
 
 WhenBroadcastReceived(cmd_varx)
@@ -565,12 +541,10 @@ WhenBroadcastReceived(cmd_vref)
     index = pop;
     Call top =_stack.top;
     objectIndex = top;
-    Call LOG(Operator.Join(Operator.Join(Operator.Join("index = ", index), "; objectIndex = "), objectIndex));
     If (objectIndex > 0)
     {
         Call value = ObjectV2::getVectorItem(index) for object index(objectIndex);
     }
-    Call LOG(Operator.Join("--> value = ", value));
     Call stack.setTop(value);
 }
 
@@ -618,8 +592,8 @@ WhenBroadcastReceived(ScriptInterpreter::runScript)
     {
         Call value = readByte;
         opcode = value;
-        Call LOG(Operator.Join(Operator.Join(Operator.Join(Operator.Join(Operator.Join("[", _runningScriptObjectIndex), ":"), (_codeIp - _codeBase)), "] "), commandProcs[((opcode * 2) - 1)]));
         Event.BroadcastAndWait(commandProcs[((opcode * 2) - 1)]);
+        Countdown += -1;
     }
 }
 
@@ -695,11 +669,6 @@ WhenBroadcastReceived(ScriptInterpreter::ScriptInterpreter)
 
 
 //----- Custom blocks -------------------------------------------------------------------------------------------------
-
-Define //TODO(string comment) (warp=false)
-{
-    List.Add(DEBUG, comment);
-}
 
 Define addProc(string x)(string sig) (warp=false)
 {
@@ -813,20 +782,8 @@ Define GameDatabase::setVar at index(string index) with value(string value) (war
     List.ReplaceItem(_gameState, ((index * 2) + 2), floor((value / 256)));
 }
 
-Define LOG(string comment) (warp=false)
-{
-    If (Log? == True)
-    {
-        List.Add(LOG, comment);
-    }
-}
-
 Define Not implemented yet(string function) (warp=false)
 {
-    List.DeleteAll(DEBUG);
-    List.Add(DEBUG, function);
-    List.Show(DEBUG);
-    Stop(all);
 }
 
 Define ObjectV2::setVectorItem(string vector.index)(string vector.value) for object index(string index) (warp=false)
@@ -972,7 +929,6 @@ Define value = readInt16 (warp=false)
 {
     value = (ObjectV2::_objData[_codeIp] + (ObjectV2::_objData[(_codeIp + 1)] * 256));
     _codeIp += 2;
-    Call LOG(Operator.Join("readInt16() value = ", value));
 }
 
 

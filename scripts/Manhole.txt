@@ -4,22 +4,23 @@ WhenGreenFlagClicked()
 {
     Pen.Clear();
     Graphics drawn? = False;
+    Countdown = 94000;
     Event.BroadcastAndWait("clear data");
     Debug? = False;
     Log? = False;
+    Event.BroadcastAndWait("initialise cursor");
     Event.BroadcastAndWait("initialise graphics queue");
     Event.BroadcastAndWait("initialise sfx");
     Event.BroadcastAndWait("initialise notes");
     Event.BroadcastAndWait("MadeEngine::MadeEngine");
-    Event.BroadcastAndWait("initialise cursor");
-    Looks.SwitchBackdropTo(wait);
+    Variable.Show(Countdown);
+    Event.Broadcast("MadeEngine::run");
+    Wait Until (Not ((Countdown > 0)));
     Repeat (10)
     {
         Looks.ChangeEffectBy(GHOST, 10);
     }
-    Event.Broadcast("MadeEngine::run");
-    Wait Until (Graphics drawn? == True);
-    Looks.SwitchBackdropTo(blank);
+    Variable.Hide(Countdown);
 }
 
 
@@ -50,6 +51,7 @@ WhenBroadcastReceived(thumbnail)
     Pen.Clear();
     Event.BroadcastAndWait("clear data");
     Looks.SwitchBackdropTo(blank);
+    Variable.Hide(Countdown);
 }
 
 
@@ -60,7 +62,7 @@ Event.BroadcastAndWait("thumbnail")
 
 //----- Costumes ------------------------------------------------------------------------------------------------------
 
-manhole.png
+download.png
 
 
 //----- Sounds --------------------------------------------------------------------------------------------------------
